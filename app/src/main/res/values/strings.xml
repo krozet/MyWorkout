@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MyWorkout</string>
+    <string name="my_workout">My Workouts</string>
+    <string name="enter_workout_name">Enter workout name</string>
+</resources>
