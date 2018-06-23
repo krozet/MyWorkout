@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CreateWorkout extends AppCompatActivity {
-    private Button myWorkoutsButton;
+    private Button myWorkoutsButton, addWorkout, clearWorkouts;
     private EditText nameMyWorkout;
 
     @Override
@@ -37,8 +37,24 @@ public class CreateWorkout extends AppCompatActivity {
         myWorkoutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeWorkout(v);
                 openMyWorkouts();
+            }
+        });
+
+        addWorkout = findViewById(R.id.add_workout);
+        addWorkout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                writeWorkout(v);
+            }
+        });
+
+        clearWorkouts = findViewById(R.id.clear_my_workouts);
+        clearWorkouts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearWorkouts(v);
             }
         });
 
@@ -50,11 +66,27 @@ public class CreateWorkout extends AppCompatActivity {
     }
 
     public void writeWorkout(View view) {
-        String name = nameMyWorkout.getText().toString();
+        String name = nameMyWorkout.getText().toString() + "\n";
         String file_name = "my_workouts";
         try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_PRIVATE);
+            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
             fileOutputStream.write(name.getBytes());
+            fileOutputStream.close();
+            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
+            nameMyWorkout.setText("");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void clearWorkouts(View view) {
+        String file_name = "my_workouts";
+        String clr = "";
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_PRIVATE);
+            fileOutputStream.write(clr.getBytes());
             fileOutputStream.close();
             Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
             nameMyWorkout.setText("");
