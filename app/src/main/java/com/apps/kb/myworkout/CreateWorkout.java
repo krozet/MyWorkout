@@ -24,15 +24,16 @@ public class CreateWorkout extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_workout);
-
+        nameMyWorkout = findViewById(R.id.enter_workout_name);
         myWorkoutsButton = findViewById(R.id.to_my_workouts);
         myWorkoutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                writeWorkout(v);
                 openMyWorkouts();
             }
         });
-        nameMyWorkout = findViewById(R.id.enter_workout_name);
+
     }
 
     public void openMyWorkouts() {

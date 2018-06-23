@@ -26,7 +26,6 @@ public class MyWorkouts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_workouts);
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
                 != PackageManager.PERMISSION_GRANTED)
@@ -40,15 +39,17 @@ public class MyWorkouts extends AppCompatActivity {
             //Permission already granted
         }
 
+        displayMyWorkouts = findViewById(R.id.display_my_workouts);
+        displayMyWorkouts.setVisibility(View.GONE);
         createWorkoutButton = findViewById(R.id.to_create_workout);
+        readMyWorkouts();
         createWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 openCreateWorkout();
             }
         });
-        displayMyWorkouts = findViewById(R.id.display_my_workouts);
-        displayMyWorkouts.setVisibility(View.GONE);
     }
 
     private String[] arrayOf(String str)
