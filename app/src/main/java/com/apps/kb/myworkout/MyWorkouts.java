@@ -1,6 +1,10 @@
 package com.apps.kb.myworkout;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -23,6 +27,19 @@ public class MyWorkouts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_workouts);
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    3);
+        }
+        else
+        {
+            //Permission already granted
+        }
+
         createWorkoutButton = findViewById(R.id.to_create_workout);
         createWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,6 +49,12 @@ public class MyWorkouts extends AppCompatActivity {
         });
         displayMyWorkouts = findViewById(R.id.display_my_workouts);
         displayMyWorkouts.setVisibility(View.GONE);
+    }
+
+    private String[] arrayOf(String str)
+    {
+        String[] returnArr = {str};
+        return returnArr;
     }
 
     public void openCreateWorkout() {
