@@ -6,4 +6,38 @@
     android:layout_height="match_parent"
     tools:context=".AddTimeInterval">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="89dp">
+
+        <Button
+            android:id="@+id/start_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="54dp"
+            android:text="@string/start_voice"
+            tools:layout_editor_absoluteX="121dp"
+            tools:layout_editor_absoluteY="49dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/end_voice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="141dp"
+            android:text="@string/end_voice"
+            tools:layout_editor_absoluteX="130dp"
+            tools:layout_editor_absoluteY="129dp" />
+    </RelativeLayout>
+
 </android.support.constraint.ConstraintLayout>

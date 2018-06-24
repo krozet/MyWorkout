@@ -19,7 +19,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".CreateWorkout" />
-        <activity android:name=".AddTimeInterval"></activity>
+        <activity android:name=".AddTimeInterval" />
+        <activity android:name=".RecordedVoices"></activity>
     </application>
 
 </manifest>

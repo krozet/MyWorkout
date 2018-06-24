@@ -17,7 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class CreateWorkout extends AppCompatActivity {
-    private Button myWorkoutsButton, addWorkout, clearWorkouts;
+    private Button myWorkoutsButton, addWorkout, clearWorkouts, addTimeInterval;
     private EditText nameMyWorkout;
 
     @Override
@@ -58,6 +58,19 @@ public class CreateWorkout extends AppCompatActivity {
             }
         });
 
+        addTimeInterval = findViewById(R.id.add_time_interval);
+        addTimeInterval.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddTimeInterval();
+            }
+        });
+
+    }
+
+    private void openAddTimeInterval() {
+        Intent intent = new Intent(this, AddTimeInterval.class);
+        startActivity(intent);
     }
 
     public void openMyWorkouts() {

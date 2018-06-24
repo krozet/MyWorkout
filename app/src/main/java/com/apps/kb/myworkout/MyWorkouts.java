@@ -27,7 +27,7 @@ public class MyWorkouts extends AppCompatActivity {
     private Button createWorkoutButton;
     private ListView displayMyWorkouts;
     private List<String> myWorkoutNamesList;
-    private List<Workout> myWorkouts;
+    private ArrayList<Workout> myWorkouts;
 
 
     @Override
@@ -63,6 +63,8 @@ public class MyWorkouts extends AppCompatActivity {
                 openCreateWorkout();
             }
         });
+
+
     }
 
     private String[] arrayOf(String str)
@@ -71,8 +73,11 @@ public class MyWorkouts extends AppCompatActivity {
         return returnArr;
     }
 
-    public void openCreateWorkout() {
+    private void openCreateWorkout() {
         Intent intent = new Intent(this, CreateWorkout.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("myWorkouts", myWorkouts);
+        intent.putExtras(bundle);
         startActivity(intent);
     }
 
