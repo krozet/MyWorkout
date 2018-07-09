@@ -18,9 +18,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateWorkout" />
-        <activity android:name=".AddTimeInterval" />
-        <activity android:name=".RecordedVoices"></activity>
+        <activity
+            android:name=".CreateWorkout"
+            android:parentActivityName=".MyWorkouts" />
+        <activity
+            android:name=".AddTimeInterval"
+            android:parentActivityName=".CreateWorkout" />
+        <activity android:name=".RecordedVoices" />
+        <activity
+            android:name=".WorkoutActivity"
+            android:label="@string/title_activity_workout"
+            android:parentActivityName=".MyWorkouts"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apps.kb.myworkout.MyWorkouts" />
+        </activity>
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -41,7 +42,19 @@ public class AddTimeInterval extends AppCompatActivity {
         Gson gson = new Gson();
         String timeIntervalAsString = gson.toJson(timeInterval);
         intent.putExtra("timeIntervalAsString", timeIntervalAsString);
-        startActivity(intent);
+        startActivityForResult(intent, 3);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        String toastString = "Request Code: " + requestCode + " Result Code: " + resultCode;
+        //Toast.makeText(getApplicationContext(), toastString, Toast.LENGTH_LONG).show();
+        if(resultCode == RESULT_OK)
+        {
+            Toast.makeText(getApplicationContext(), "Voice Added", Toast.LENGTH_LONG).show();
+            onBackPressed();
+        }
     }
 
 }
