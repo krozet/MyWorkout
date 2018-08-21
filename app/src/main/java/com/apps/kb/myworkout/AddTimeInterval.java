@@ -23,12 +23,13 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.google.gson.Gson;
 
 public class AddTimeInterval extends AppCompatActivity {
-    Button addStartVoiceButton, addEndVoiceButton, addBackgroundColorButton;
+    Button addStartVoiceButton, addEndVoiceButton, addBackgroundColorButton, addTextColorButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
     private int currentBackgroundColor = 0xffffffff;
-    private ScrollView root;
+    private int currentTextColor = 0x000000;
 
+    private ScrollView root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +110,41 @@ public class AddTimeInterval extends AppCompatActivity {
                         .show();
             }
         });
+
+        // text color picker
+        addTextColorButton = findViewById(R.id.text_color);
+        addTextColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Context context = AddTimeInterval.this;
+                ColorPickerDialogBuilder
+                        .with(context, R.style.ColorPickerDialogTheme)
+                        .setTitle("Choose color")
+                        .initialColor(currentTextColor)
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(12)
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
+                            @Override
+                            public void onColorSelected(int selectedColor) {
+                                // remove this later
+                                toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+                            }
+                        })
+                        .setPositiveButton("ok", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                changeTextColor(selectedColor);
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .build()
+                        .show();
+            }
+        });
     }
 
     private void setNumberPickers() {
@@ -147,6 +183,11 @@ public class AddTimeInterval extends AppCompatActivity {
     private void changeBackgroundColor(int selectedColor) {
         currentBackgroundColor = selectedColor;
         root.setBackgroundColor(selectedColor);
+    }
+
+    private void changeTextColor(int selectedColor) {
+        currentTextColor = selectedColor;
+//        root.setBackgroundColor(selectedColor);
     }
 
 }

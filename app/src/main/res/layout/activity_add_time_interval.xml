@@ -123,12 +123,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Button
+                android:id="@+id/text_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="470dp"
+                android:text="Text Color" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <TextView
                 android:id="@+id/display_message"
                 android:layout_width="79dp"
                 android:layout_height="46dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="470dp"
+                android:layout_marginTop="560dp"
                 android:layout_toStartOf="@+id/display_message_input"
                 android:text="Display Message"
                 android:layout_toLeftOf="@+id/display_message_input" />
@@ -139,7 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="470dp"
+                android:layout_marginTop="560dp"
                 android:ems="10"
                 android:hint="ex. Time for push ups!"
                 android:inputType="textLongMessage"
