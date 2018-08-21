@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -26,7 +27,7 @@ public class AddTimeInterval extends AppCompatActivity {
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
     private int currentBackgroundColor = 0xffffffff;
-    private View root;
+    private ScrollView root;
 
 
     @Override
