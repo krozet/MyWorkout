@@ -12,6 +12,12 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
 
+        <View
+            android:id="@+id/color_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
         <NumberPicker
             android:id="@+id/minutes_number_picker"
             android:layout_width="wrap_content"
@@ -106,6 +112,15 @@
             android:text="@string/end_voice"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="129dp" />
+
+        <Button
+            android:id="@+id/background_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="104dp"
+            android:text="@string/background_color" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
