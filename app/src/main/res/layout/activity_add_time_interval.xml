@@ -106,20 +106,26 @@
             android:id="@+id/end_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="192dp"
+            android:layout_marginTop="275dp"
             android:text="@string/end_voice"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="129dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <Button
             android:id="@+id/background_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="104dp"
+            android:layout_marginTop="375dp"
             android:text="@string/background_color" />
     </RelativeLayout>
 
