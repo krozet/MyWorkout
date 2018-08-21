@@ -74,15 +74,14 @@ public class AddTimeInterval extends AppCompatActivity {
             }
         });
 
-        // background color
+        // background color picker
         addBackgroundColorButton = findViewById(R.id.background_color);
         addBackgroundColorButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Context context = AddTimeInterval.this;
-                AlertDialog.Builder mBuilder = new AlertDialog.Builder(AddTimeInterval.this);
                 ColorPickerDialogBuilder
-                        .with(context)
+                        .with(context, R.style.ColorPickerDialogTheme)
                         .setTitle("Choose color")
                         .initialColor(currentBackgroundColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
@@ -90,6 +89,7 @@ public class AddTimeInterval extends AppCompatActivity {
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
                             @Override
                             public void onColorSelected(int selectedColor) {
+                                // remove this later
                                 toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                             }
                         })
