@@ -184,13 +184,6 @@ public class MyWorkouts extends AppCompatActivity {
         builder.show();
     }
 
-/*    @Override
-    public void onBackPressed()
-    {
-        System.out.println("BACK PRESSED");
-        super.onBackPressed();
-    }*/
-
 
     public void printMyWorkouts()
     {

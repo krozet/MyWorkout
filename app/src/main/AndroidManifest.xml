@@ -34,6 +34,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.apps.kb.myworkout.MyWorkouts" />
         </activity>
+        <activity
+            android:name=".EditWorkoutActivity"
+            android:label="@string/title_activity_edit_workout"
+            android:parentActivityName=".WorkoutActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.apps.kb.myworkout.WorkoutActivity" />
+        </activity>
     </application>
 
 </manifest>
