@@ -5,6 +5,7 @@
     <string name="to_create_workout">Create Workout</string>
     <string name="start_voice">Add Start Voice</string>
     <string name="end_voice">Add End Voice</string>
+    <string name="title_activity_workout">WorkoutActivity</string>
 
     <!-- Font -->
     <string name="roboto_regular">sans-serif</string>
