@@ -3,8 +3,10 @@ package com.apps.kb.myworkout;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -209,7 +211,27 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
 
     private void changeBackgroundColor(int selectedColor) {
         currentBackgroundColor = selectedColor;
-        root.setBackgroundColor(selectedColor);
+
+        // convert color the hsv from int
+        float[] hsv = new float[3];
+        Color.colorToHSV(currentBackgroundColor, hsv);
+
+        if (hsv[2] > .5)
+            // make the color darker
+            hsv[2] *= 0.75f;
+        else
+            // make the color lighter
+            hsv[2] = 1.0f - 0.75f * (1.0f - hsv[2]);
+
+        int secondaryBackgroundColor = Color.HSVToColor(hsv);
+
+        // gradient effect
+        GradientDrawable gd = new GradientDrawable(
+                GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[] {selectedColor, secondaryBackgroundColor});
+        gd.setCornerRadius(0f);
+
+        root.setBackgroundDrawable(gd);
     }
 
     private void changeTextColor(int selectedColor) {
