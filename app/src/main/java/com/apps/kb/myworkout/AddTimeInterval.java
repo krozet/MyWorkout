@@ -3,15 +3,19 @@ package com.apps.kb.myworkout;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -22,14 +26,18 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Field;
+
 public class AddTimeInterval extends AppCompatActivity {
+    private int currentBackgroundColor = 0xffffffff;
+    private int currentTextColor = 0xffffffff;
+    private ScrollView root;
+
     Button addStartVoiceButton, addEndVoiceButton, addBackgroundColorButton, addTextColorButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
-    private int currentBackgroundColor = 0xffffffff;
-    private int currentTextColor = 0x000000;
-
-    private ScrollView root;
+    TextView selectTime, colon, displayMessage;
+    EditText displayMessageInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +46,10 @@ public class AddTimeInterval extends AppCompatActivity {
         root = findViewById(R.id.color_screen);
         timeInterval = new TimeInterval();
         timeInterval.setName("fuck brad");
+
+        // select time
+        selectTime = findViewById(R.id.select_time);
+        colon = findViewById(R.id.colon);
 
         // minutes and seconds
         minutesNumberPicker = findViewById(R.id.minutes_number_picker);
@@ -145,6 +157,10 @@ public class AddTimeInterval extends AppCompatActivity {
                         .show();
             }
         });
+
+        // display message
+        displayMessage = findViewById(R.id.display_message);
+        displayMessageInput = findViewById(R.id.display_message_input);
     }
 
     private void setNumberPickers() {
@@ -187,7 +203,42 @@ public class AddTimeInterval extends AppCompatActivity {
 
     private void changeTextColor(int selectedColor) {
         currentTextColor = selectedColor;
+        displayMessage.setTextColor(selectedColor);
+        displayMessageInput.setTextColor(selectedColor);
+        selectTime.setTextColor(selectedColor);
+        colon.setTextColor(selectedColor);
+        setNumberPickerTextColor(minutesNumberPicker, selectedColor);
+        setNumberPickerTextColor(secondsNumberPicker, selectedColor);
 //        root.setBackgroundColor(selectedColor);
+    }
+
+    private static boolean setNumberPickerTextColor(NumberPicker numberPicker, int color)
+    {
+        final int count = numberPicker.getChildCount();
+        for(int i = 0; i < count; i++){
+            View child = numberPicker.getChildAt(i);
+            if(child instanceof EditText){
+                try{
+                    Field selectorWheelPaintField = numberPicker.getClass()
+                            .getDeclaredField("mSelectorWheelPaint");
+                    selectorWheelPaintField.setAccessible(true);
+                    ((Paint)selectorWheelPaintField.get(numberPicker)).setColor(color);
+                    ((EditText)child).setTextColor(color);
+                    numberPicker.invalidate();
+                    return true;
+                }
+                catch(NoSuchFieldException e){
+                    e.printStackTrace();
+                }
+                catch(IllegalAccessException e){
+                    Log.w("setNumberPickerTextClr", e);
+                }
+                catch(IllegalArgumentException e){
+                    Log.w("setNumberPickerTextClr", e);
+                }
+            }
+        }
+        return false;
     }
 
 }
