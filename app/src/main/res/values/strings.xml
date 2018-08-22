@@ -17,5 +17,6 @@
 
     <string name="number_picker_formatter">%02d</string>
     <string name="background_color">Background Color</string>
+    <string name="background_image">Background Image</string>
 
 </resources>

@@ -109,12 +109,27 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/background_color"
+                android:id="@+id/background_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="380dp"
+                android:text="@string/background_image" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/background_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="470dp"
                 android:text="@string/background_color" />
 
         </RelativeLayout>
@@ -129,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="470dp"
+                android:layout_marginTop="560dp"
                 android:text="Text Color" />
 
         </RelativeLayout>
@@ -143,7 +158,7 @@
                 android:layout_width="79dp"
                 android:layout_height="46dp"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="560dp"
+                android:layout_marginTop="650dp"
                 android:layout_toStartOf="@+id/display_message_input"
                 android:text="Display Message"
                 android:layout_toLeftOf="@+id/display_message_input" />
@@ -154,12 +169,27 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="560dp"
+                android:layout_marginTop="650dp"
                 android:ems="10"
                 android:hint="ex. Time for push ups!"
                 android:inputType="textLongMessage"
                 android:selectAllOnFocus="false" />
 
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Switch
+                android:id="@+id/five_second_alert"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="740dp"
+                android:layout_centerHorizontal="true"
+                android:text="5 Second Alert" />
         </RelativeLayout>
 
     </android.support.constraint.ConstraintLayout>

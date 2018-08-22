@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,16 +30,18 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Field;
 
-public class AddTimeInterval extends AppCompatActivity {
+public class AddTimeInterval extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private int currentBackgroundColor = 0xffffffff;
     private int currentTextColor = 0xffffffff;
+    private boolean fsAlert;
     private ScrollView root;
 
-    Button addStartVoiceButton, addEndVoiceButton, addBackgroundColorButton, addTextColorButton;
+    Button addStartVoiceButton, addEndVoiceButton, addBackgroundImage, addBackgroundColorButton, addTextColorButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
     TextView selectTime, colon, displayMessage;
     EditText displayMessageInput;
+    Switch fiveSecondAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +165,13 @@ public class AddTimeInterval extends AppCompatActivity {
         // display message
         displayMessage = findViewById(R.id.display_message);
         displayMessageInput = findViewById(R.id.display_message_input);
+        // save the value of the message
+        //displayMessageInput.getText().toString();
+
+        // switch
+        fiveSecondAlert = findViewById(R.id.five_second_alert);
+        fiveSecondAlert.setOnCheckedChangeListener(this);
+
     }
 
     private void setNumberPickers() {
@@ -207,6 +218,7 @@ public class AddTimeInterval extends AppCompatActivity {
         displayMessageInput.setTextColor(selectedColor);
         selectTime.setTextColor(selectedColor);
         colon.setTextColor(selectedColor);
+        fiveSecondAlert.setTextColor(selectedColor);
         setNumberPickerTextColor(minutesNumberPicker, selectedColor);
         setNumberPickerTextColor(secondsNumberPicker, selectedColor);
 //        root.setBackgroundColor(selectedColor);
@@ -241,4 +253,8 @@ public class AddTimeInterval extends AppCompatActivity {
         return false;
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            fsAlert = isChecked;
+    }
 }
