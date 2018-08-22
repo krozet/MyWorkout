@@ -1,12 +1,19 @@
 package com.apps.kb.myworkout;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +23,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.Switch;
@@ -33,9 +41,12 @@ import com.google.gson.Gson;
 import java.lang.reflect.Field;
 
 public class AddTimeInterval extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
+    private static final int PERMISSION_REQUEST = 0;
+    private static final int RESULT_LOAD_IMAGE = 1;
     private int currentBackgroundColor = 0xffffffff;
     private int secondaryBackgroundColor = 0xffffffff;
     private int currentTextColor = 0xffffffff;
+    private String picturePath = "";
     private boolean fsAlert;
     private ScrollView root;
 
@@ -45,6 +56,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     TextView selectTime, colon, displayMessage;
     EditText displayMessageInput;
     Switch fiveSecondAlert;
+    ImageView backgroundImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +104,23 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             @Override
             public void onClick(View v) {
                 openAddTimeInterval();
+            }
+        });
+
+        // background image
+        backgroundImageView = findViewById(R.id.background_image_view);
+        addBackgroundImage = findViewById(R.id.background_image);
+        addBackgroundImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
+                }
+
+                Intent media = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(media, RESULT_LOAD_IMAGE);
             }
         });
 
@@ -197,12 +226,27 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        String toastString = "Request Code: " + requestCode + " Result Code: " + resultCode;
-        //Toast.makeText(getApplicationContext(), toastString, Toast.LENGTH_LONG).show();
-        if(resultCode == RESULT_OK)
-        {
-            Toast.makeText(getApplicationContext(), "Voice Added", Toast.LENGTH_LONG).show();
-            onBackPressed();
+        switch(requestCode) {
+            case RESULT_LOAD_IMAGE:
+                if(resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    picturePath = cursor.getString(columnIndex);
+                    cursor.close();
+                    backgroundImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                }
+                break;
+            default:
+                String toastString = "Request Code: " + requestCode + " Result Code: " + resultCode;
+                //Toast.makeText(getApplicationContext(), toastString, Toast.LENGTH_LONG).show();
+                if(resultCode == RESULT_OK)
+                {
+                    Toast.makeText(getApplicationContext(), "Voice Added", Toast.LENGTH_LONG).show();
+                    onBackPressed();
+                }
         }
     }
 
