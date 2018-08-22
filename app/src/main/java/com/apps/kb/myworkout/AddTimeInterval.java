@@ -34,6 +34,7 @@ import java.lang.reflect.Field;
 
 public class AddTimeInterval extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private int currentBackgroundColor = 0xffffffff;
+    private int secondaryBackgroundColor = 0xffffffff;
     private int currentTextColor = 0xffffffff;
     private boolean fsAlert;
     private ScrollView root;
@@ -223,7 +224,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             // make the color lighter
             hsv[2] = 1.0f - 0.75f * (1.0f - hsv[2]);
 
-        int secondaryBackgroundColor = Color.HSVToColor(hsv);
+        secondaryBackgroundColor = Color.HSVToColor(hsv);
 
         // gradient effect
         GradientDrawable gd = new GradientDrawable(
@@ -243,7 +244,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         fiveSecondAlert.setTextColor(selectedColor);
         setNumberPickerTextColor(minutesNumberPicker, selectedColor);
         setNumberPickerTextColor(secondsNumberPicker, selectedColor);
-//        root.setBackgroundColor(selectedColor);
     }
 
     private static boolean setNumberPickerTextColor(NumberPicker numberPicker, int color)

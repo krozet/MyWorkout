@@ -9,7 +9,8 @@ public class TimeInterval implements Parcelable{
     private String pathToBeginningAudio;
     private String pathToEndingAudio;
     private String pathToBackgroundImage;
-    private int backgroundColor;
+    private int primaryBackgroundColor;
+    private int secondaryBackgroundColor;
     private int textColor;
     private String backgroundText;
     private boolean endingAlert;
@@ -31,7 +32,8 @@ public class TimeInterval implements Parcelable{
         pathToBeginningAudio = in.readString();
         pathToEndingAudio = in.readString();
         pathToBackgroundImage = in.readString();
-        backgroundColor = in.readInt();
+        primaryBackgroundColor = in.readInt();
+        secondaryBackgroundColor = in.readInt();
         textColor = in.readInt();
         backgroundText = in.readString();
         endingAlert = in.readByte() != 0;
@@ -52,21 +54,22 @@ public class TimeInterval implements Parcelable{
         }
     };
 
-    //name, pathToBeginningAudio, pathToEndingAudio, pathToBackgroundImage, backgroundColor, backgroundText, endingAlert, minutes, seconds
+    //name, pathToBeginningAudio, pathToEndingAudio, pathToBackgroundImage, primaryBackgroundColor, secondaryBackgroundColor, backgroundText, endingAlert, minutes, seconds
     private void parseString(String obj) {
         String[] tokens = obj.split(";");
 
-        if(tokens.length == 10) {
+        if(tokens.length == 11) {
             name = tokens[0];
             pathToBeginningAudio = tokens[1];
             pathToEndingAudio = tokens[2];
             pathToBackgroundImage = tokens[3];
-            backgroundColor = Integer.parseInt(tokens[4]);
-            textColor = Integer.parseInt(tokens[5]);
-            backgroundText = tokens[6];
-            endingAlert = Boolean.parseBoolean(tokens[7]);
-            minutes = Integer.parseInt(tokens[8]);
-            seconds = Integer.parseInt(tokens[9]);
+            primaryBackgroundColor = Integer.parseInt(tokens[4]);
+            secondaryBackgroundColor = Integer.parseInt(tokens[5]);
+            textColor = Integer.parseInt(tokens[6]);
+            backgroundText = tokens[7];
+            endingAlert = Boolean.parseBoolean(tokens[8]);
+            minutes = Integer.parseInt(tokens[9]);
+            seconds = Integer.parseInt(tokens[10]);
         } else {
             Log.i("TimeInterval", "Not correct amount of arguments");
         }
@@ -92,8 +95,12 @@ public class TimeInterval implements Parcelable{
         return pathToBackgroundImage;
     }
 
-    public int getBackgroundColor() {
-        return backgroundColor;
+    public int getPrimaryBackgroundColor() {
+        return primaryBackgroundColor;
+    }
+
+    public int getSecondaryBackgroundColor() {
+        return secondaryBackgroundColor;
     }
 
     public int getTextColor() {
@@ -132,8 +139,12 @@ public class TimeInterval implements Parcelable{
         this.pathToBackgroundImage = pathToBackgroundImage;
     }
 
-    public void setBackgroundColor(int backgroundColor) {
-        this.backgroundColor = backgroundColor;
+    public void setPrimaryBackgroundColor(int primaryBackgroundColor) {
+        this.primaryBackgroundColor = primaryBackgroundColor;
+    }
+
+    public void setSecondaryBackgroundColor(int secondaryBackgroundColor) {
+        this.secondaryBackgroundColor = secondaryBackgroundColor;
     }
 
     public void setTextColor(int textColor) {
@@ -167,7 +178,8 @@ public class TimeInterval implements Parcelable{
         dest.writeString(pathToBeginningAudio);
         dest.writeString(pathToEndingAudio);
         dest.writeString(pathToBackgroundImage);
-        dest.writeInt(backgroundColor);
+        dest.writeInt(primaryBackgroundColor);
+        dest.writeInt(secondaryBackgroundColor);
         dest.writeInt(textColor);
         dest.writeString(backgroundText);
         dest.writeByte((byte) (endingAlert ? 1 : 0));
