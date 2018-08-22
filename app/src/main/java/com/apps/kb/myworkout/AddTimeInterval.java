@@ -247,6 +247,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                     Toast.makeText(getApplicationContext(), "Voice Added", Toast.LENGTH_LONG).show();
                     onBackPressed();
                 }
+                break;
         }
     }
 
