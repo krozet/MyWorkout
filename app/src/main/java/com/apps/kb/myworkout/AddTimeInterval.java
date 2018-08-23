@@ -9,13 +9,10 @@ import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
-import com.flask.colorpicker.OnColorChangedListener;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
@@ -50,7 +46,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private boolean fsAlert;
     private ScrollView root;
 
-    Button addStartVoiceButton, addEndVoiceButton, addBackgroundImage, addBackgroundColorButton, addTextColorButton;
+    Button addStartVoiceButton, addEndVoiceButton, addBackgroundImageButton, addBackgroundColorButton, addTextColorButton, saveButton, cancelButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
     TextView selectTime, colon, displayMessage;
@@ -74,6 +70,28 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setupTextColorPicker();
         setupDisplayMessage();
         setupFiveSecondAlert();
+        setupSave();
+        setupCancel();
+    }
+
+    private void setupCancel() {
+        cancelButton = findViewById(R.id.ti_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    private void setupSave() {
+        saveButton = findViewById(R.id.ti_save);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                openAddTimeInterval();
+            }
+        });
     }
 
     private void setupFiveSecondAlert() {
@@ -167,8 +185,8 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private void setupBackgroundImage() {
         // background image
         backgroundImageView = findViewById(R.id.background_image_view);
-        addBackgroundImage = findViewById(R.id.background_image);
-        addBackgroundImage.setOnClickListener(new View.OnClickListener() {
+        addBackgroundImageButton = findViewById(R.id.background_image);
+        addBackgroundImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
