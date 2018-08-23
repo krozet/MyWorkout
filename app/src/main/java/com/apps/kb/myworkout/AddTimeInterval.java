@@ -66,99 +66,31 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         timeInterval = new TimeInterval();
         timeInterval.setName("fuck brad");
 
-        // select time
-        selectTime = findViewById(R.id.select_time);
-        colon = findViewById(R.id.colon);
+        setupSelectTime();
+        setupStartVoice();
+        setupEndVoice();
+        setupBackgroundImage();
+        setupBackgroundColorPicker();
+        setupTextColorPicker();
+        setupDisplayMessage();
+        setupFiveSecondAlert();
+    }
 
-        // minutes and seconds
-        minutesNumberPicker = findViewById(R.id.minutes_number_picker);
-        secondsNumberPicker = findViewById(R.id.seconds_number_picker);
-        setNumberPickers();
+    private void setupFiveSecondAlert() {
+        // switch
+        fiveSecondAlert = findViewById(R.id.five_second_alert);
+        fiveSecondAlert.setOnCheckedChangeListener(this);
+    }
 
-        minutesNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                timeInterval.setMinutes(newVal);
-            }
-        });
+    private void setupDisplayMessage() {
+        // display message
+        displayMessage = findViewById(R.id.display_message);
+        displayMessageInput = findViewById(R.id.display_message_input);
+        // save the value of the message
+        //displayMessageInput.getText().toString();
+    }
 
-        secondsNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                timeInterval.setSeconds(newVal);
-            }
-        });
-
-        // start voice
-        addStartVoiceButton = findViewById(R.id.start_voice);
-        addStartVoiceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAddTimeInterval();
-            }
-        });
-
-        // end voice
-        addEndVoiceButton = findViewById(R.id.end_voice);
-        addEndVoiceButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAddTimeInterval();
-            }
-        });
-
-        // background image
-        backgroundImageView = findViewById(R.id.background_image_view);
-        addBackgroundImage = findViewById(R.id.background_image);
-        addBackgroundImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
-                }
-
-                Intent media = new Intent(Intent.ACTION_PICK,
-                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(media, RESULT_LOAD_IMAGE);
-            }
-        });
-
-        // background color picker
-        addBackgroundColorButton = findViewById(R.id.background_color);
-        addBackgroundColorButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Context context = AddTimeInterval.this;
-                ColorPickerDialogBuilder
-                        .with(context, R.style.ColorPickerDialogTheme)
-                        .setTitle("Choose color")
-                        .initialColor(currentBackgroundColor)
-                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
-                        .density(12)
-                        .setOnColorSelectedListener(new OnColorSelectedListener() {
-                            @Override
-                            public void onColorSelected(int selectedColor) {
-                                // remove this later
-                                toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
-                            }
-                        })
-                        .setPositiveButton("ok", new ColorPickerClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
-                                changeBackgroundColor(selectedColor);
-                            }
-                        })
-                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .build()
-                        .show();
-            }
-        });
-
+    private void setupTextColorPicker() {
         // text color picker
         addTextColorButton = findViewById(R.id.text_color);
         addTextColorButton.setOnClickListener(new View.OnClickListener() {
@@ -193,17 +125,109 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                         .show();
             }
         });
+    }
 
-        // display message
-        displayMessage = findViewById(R.id.display_message);
-        displayMessageInput = findViewById(R.id.display_message_input);
-        // save the value of the message
-        //displayMessageInput.getText().toString();
+    private void setupBackgroundColorPicker() {
+        // background color picker
+        addBackgroundColorButton = findViewById(R.id.background_color);
+        addBackgroundColorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Context context = AddTimeInterval.this;
+                ColorPickerDialogBuilder
+                        .with(context, R.style.ColorPickerDialogTheme)
+                        .setTitle("Choose color")
+                        .initialColor(currentBackgroundColor)
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .density(12)
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
+                            @Override
+                            public void onColorSelected(int selectedColor) {
+                                // remove this later
+                                toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
+                            }
+                        })
+                        .setPositiveButton("ok", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int selectedColor, Integer[] allColors) {
+                                changeBackgroundColor(selectedColor);
+                            }
+                        })
+                        .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .build()
+                        .show();
+            }
+        });
+    }
 
-        // switch
-        fiveSecondAlert = findViewById(R.id.five_second_alert);
-        fiveSecondAlert.setOnCheckedChangeListener(this);
+    private void setupBackgroundImage() {
+        // background image
+        backgroundImageView = findViewById(R.id.background_image_view);
+        addBackgroundImage = findViewById(R.id.background_image);
+        addBackgroundImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PERMISSION_REQUEST);
+                }
 
+                Intent media = new Intent(Intent.ACTION_PICK,
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(media, RESULT_LOAD_IMAGE);
+            }
+        });
+    }
+
+    private void setupEndVoice() {
+        // end voice
+        addEndVoiceButton = findViewById(R.id.end_voice);
+        addEndVoiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddTimeInterval();
+            }
+        });
+    }
+
+    private void setupStartVoice() {
+        // start voice
+        addStartVoiceButton = findViewById(R.id.start_voice);
+        addStartVoiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddTimeInterval();
+            }
+        });
+    }
+
+    private void setupSelectTime() {
+        // select time
+        selectTime = findViewById(R.id.select_time);
+        colon = findViewById(R.id.colon);
+
+        // minutes and seconds
+        minutesNumberPicker = findViewById(R.id.minutes_number_picker);
+        secondsNumberPicker = findViewById(R.id.seconds_number_picker);
+        setNumberPickers();
+
+        minutesNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                timeInterval.setMinutes(newVal);
+            }
+        });
+
+        secondsNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                timeInterval.setSeconds(newVal);
+            }
+        });
     }
 
     private void setNumberPickers() {
@@ -324,4 +348,5 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             fsAlert = isChecked;
     }
+
 }
