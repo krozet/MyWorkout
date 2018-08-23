@@ -287,6 +287,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
             case RESULT_LOAD_IMAGE:
                 if(resultCode == RESULT_OK) {
@@ -300,13 +301,19 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                     backgroundImageView.setImageBitmap(BitmapFactory.decodeFile(pathToBackgroundImage));
                 }
                 break;
-            default:
-                String toastString = "Request Code: " + requestCode + " Result Code: " + resultCode;
-                //Toast.makeText(getApplicationContext(), toastString, Toast.LENGTH_LONG).show();
+            case RESULT_START_VOICE:
                 if(resultCode == RESULT_OK)
                 {
                     Toast.makeText(getApplicationContext(), "Voice Added", Toast.LENGTH_LONG).show();
-                    onBackPressed();
+                    pathToBeginningAudio = data.getStringExtra("outputFile");
+                    System.out.println("outputFile inside AddTimeInterval: " + pathToBeginningAudio);
+                }
+                break;
+            case RESULT_END_VOICE:
+                if(resultCode == RESULT_OK) {
+                    Toast.makeText(getApplicationContext(), "Voice Added", Toast.LENGTH_LONG).show();
+                    pathToEndingAudio = data.getStringExtra("outputFile");
+                    System.out.println("outputFile inside AddTimeInterval: " + pathToEndingAudio);
                 }
                 break;
         }

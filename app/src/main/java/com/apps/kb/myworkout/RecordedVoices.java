@@ -1,5 +1,7 @@
 package com.apps.kb.myworkout;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
@@ -134,7 +136,11 @@ public class RecordedVoices extends AppCompatActivity {
             public void onClick(View v)
             {
                 confirmPressed = true;
-                onBackPressed();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("outputFile", outputFile);
+                System.out.println("outputFile inside RecordedVoices: " + outputFile);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
             }
         }));
 
