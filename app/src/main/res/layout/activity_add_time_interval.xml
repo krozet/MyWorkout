@@ -201,5 +201,35 @@
                 android:text="5 Second Alert" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="0dp">
+
+            <Button
+                android:id="@+id/ti_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="830dp"
+                android:text="@string/cancel"
+                tools:layout_editor_absoluteX="130dp"
+                tools:layout_editor_absoluteY="129dp" />
+
+            <Button
+                android:id="@+id/ti_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="200dp"
+                android:layout_marginTop="830dp"
+                android:text="@string/save"
+                tools:layout_editor_absoluteX="130dp"
+                tools:layout_editor_absoluteY="129dp" />
+
+        </RelativeLayout>
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
