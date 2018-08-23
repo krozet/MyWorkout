@@ -39,13 +39,24 @@ import java.lang.reflect.Field;
 public class AddTimeInterval extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
-    private int currentBackgroundColor = 0xffffffff;
-    private int secondaryBackgroundColor = 0xffffffff;
-    private int currentTextColor = 0xffffffff;
-    private String picturePath = "";
-    private boolean fsAlert;
-    private ScrollView root;
+    private static final int RESULT_START_VOICE = 2;
+    private static final int RESULT_END_VOICE = 3;
 
+    // time interval values
+    private String name;
+    private String pathToBeginningAudio;
+    private String pathToEndingAudio;
+    private String backgroundText;
+    private int minutes;
+    private int seconds;
+    private int primaryBackgroundColor = 0xffffffff;
+    private int secondaryBackgroundColor = 0xffffffff;
+    private int textColor = 0xffffffff;
+    private String pathToBackgroundImage = "";
+    private boolean endingAlert;
+
+    // widgets
+    private ScrollView root;
     Button addStartVoiceButton, addEndVoiceButton, addBackgroundImageButton, addBackgroundColorButton, addTextColorButton, saveButton, cancelButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
@@ -89,7 +100,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                openAddTimeInterval();
+                finish();
             }
         });
     }
@@ -118,7 +129,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                 ColorPickerDialogBuilder
                         .with(context, R.style.ColorPickerDialogTheme)
                         .setTitle("Choose color")
-                        .initialColor(currentTextColor)
+                        .initialColor(textColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                         .density(12)
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
@@ -155,7 +166,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                 ColorPickerDialogBuilder
                         .with(context, R.style.ColorPickerDialogTheme)
                         .setTitle("Choose color")
-                        .initialColor(currentBackgroundColor)
+                        .initialColor(primaryBackgroundColor)
                         .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
                         .density(12)
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
@@ -207,7 +218,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         addEndVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAddTimeInterval();
+                openStartRecordedVoice();
             }
         });
     }
@@ -218,7 +229,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         addStartVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openAddTimeInterval();
+                openEndRecordedVoice();
             }
         });
     }
@@ -257,12 +268,20 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         secondsNumberPicker.setValue(30);
     }
 
-    private void openAddTimeInterval() {
+    private void openStartRecordedVoice() {
         Intent intent = new Intent(this, RecordedVoices.class);
         Gson gson = new Gson();
         String timeIntervalAsString = gson.toJson(timeInterval);
         intent.putExtra("timeIntervalAsString", timeIntervalAsString);
-        startActivityForResult(intent, 3);
+        startActivityForResult(intent, RESULT_START_VOICE);
+    }
+
+    private void openEndRecordedVoice() {
+        Intent intent = new Intent(this, RecordedVoices.class);
+        Gson gson = new Gson();
+        String timeIntervalAsString = gson.toJson(timeInterval);
+        intent.putExtra("timeIntervalAsString", timeIntervalAsString);
+        startActivityForResult(intent, RESULT_END_VOICE);
     }
 
     @Override
@@ -276,9 +295,9 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                     Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                     cursor.moveToFirst();
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    picturePath = cursor.getString(columnIndex);
+                    pathToBackgroundImage = cursor.getString(columnIndex);
                     cursor.close();
-                    backgroundImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                    backgroundImageView.setImageBitmap(BitmapFactory.decodeFile(pathToBackgroundImage));
                 }
                 break;
             default:
@@ -298,11 +317,11 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     }
 
     private void changeBackgroundColor(int selectedColor) {
-        currentBackgroundColor = selectedColor;
+        primaryBackgroundColor = selectedColor;
 
         // convert color the hsv from int
         float[] hsv = new float[3];
-        Color.colorToHSV(currentBackgroundColor, hsv);
+        Color.colorToHSV(primaryBackgroundColor, hsv);
 
         if (hsv[2] > .5)
             // make the color darker
@@ -323,7 +342,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     }
 
     private void changeTextColor(int selectedColor) {
-        currentTextColor = selectedColor;
+        textColor = selectedColor;
         displayMessage.setTextColor(selectedColor);
         displayMessageInput.setTextColor(selectedColor);
         selectTime.setTextColor(selectedColor);
@@ -364,7 +383,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            fsAlert = isChecked;
+            endingAlert = isChecked;
     }
 
 }

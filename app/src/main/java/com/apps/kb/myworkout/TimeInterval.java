@@ -187,4 +187,8 @@ public class TimeInterval implements Parcelable{
         dest.writeInt(seconds);
         dest.writeString(emptyObj);
     }
+
+    public void writeToFile() {
+
+    }
 }
