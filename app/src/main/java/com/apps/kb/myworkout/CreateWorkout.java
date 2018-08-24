@@ -1,6 +1,7 @@
 package com.apps.kb.myworkout;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -21,6 +22,7 @@ public class CreateWorkout extends AppCompatActivity {
     private Button myWorkoutsButton, addWorkout, clearWorkouts, addTimeInterval;
     private EditText nameMyWorkout;
     private int resultcode;
+    private String name = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,41 +40,16 @@ public class CreateWorkout extends AppCompatActivity {
             }
         });
 
-        //Commenting this out because I don't think we need it
-/*        myWorkoutsButton = findViewById(R.id.to_my_workouts);
-        myWorkoutsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openMyWorkouts();
-            }
-        });*/
-
         addWorkout = findViewById(R.id.add_workout);
         addWorkout.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                writeWorkout(v);
+//                writeWorkout(v);
                 InputMethodManager imm = (InputMethodManager)getSystemService(
                         getApplicationContext().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(nameMyWorkout.getWindowToken(), 0);
                 resultcode = RESULT_OK;
-                onBackPressed();
-            }
-        });
-
-        clearWorkouts = findViewById(R.id.clear_my_workouts);
-        clearWorkouts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearWorkouts();
-            }
-        });
-
-        addTimeInterval = findViewById(R.id.add_time_interval);
-        addTimeInterval.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 openAddTimeInterval();
             }
         });
@@ -92,44 +69,16 @@ public class CreateWorkout extends AppCompatActivity {
     }
 
     private void openAddTimeInterval() {
+        name = nameMyWorkout.getText().toString();
         Intent intent = new Intent(this, AddTimeInterval.class);
+        intent.putExtra("name", name);
+        intent.putExtra("creatingWorkout", true);
+        setResult(Activity.RESULT_OK, intent);
         startActivity(intent);
     }
 
     public void openMyWorkouts() {
         Intent intent = new Intent(this, MyWorkouts.class);
         startActivity(intent);
-    }
-
-    public void writeWorkout(View view) {
-        String name = nameMyWorkout.getText().toString() + "\n";
-        String file_name = "my_workouts";
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
-            fileOutputStream.write(name.getBytes());
-            fileOutputStream.close();
-            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
-            nameMyWorkout.setText("");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void clearWorkouts() {
-        String file_name = "my_workouts";
-        String clr = "";
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_PRIVATE);
-            fileOutputStream.write(clr.getBytes());
-            fileOutputStream.close();
-            Toast.makeText(getApplicationContext(), "My workouts cleared", Toast.LENGTH_LONG).show();
-            nameMyWorkout.setText("");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

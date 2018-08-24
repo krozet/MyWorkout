@@ -7,10 +7,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.os.Build;
 =======
 import android.graphics.Typeface;
 >>>>>>> master
+=======
+import android.graphics.Typeface;
+import android.os.Build;
+>>>>>>> development
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -26,12 +31,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -43,13 +50,19 @@ public class MyWorkouts extends AppCompatActivity {
     private ArrayList<Workout> myWorkouts;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> development
     final int CREATE_WORKOUT = 1;
     final int OPEN_WORKOUT = 2;
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
 
+<<<<<<< HEAD
 =======
 >>>>>>> master
+=======
+>>>>>>> development
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,6 +242,11 @@ public class MyWorkouts extends AppCompatActivity {
             fileOutputStream.write(clr.getBytes());
             fileOutputStream.close();
 
+            // delete Time Intervals as well by deleting the myWorkoutNamesList.get(pos) file
+            if(new File(System.getProperty("user.dir"), myWorkoutNamesList.get(pos)).exists())
+                if(!getApplicationContext().deleteFile( myWorkoutNamesList.get(pos)))
+                    throw new IOException("Unable to delete file: " + myWorkoutNamesList.get(pos));
+
             fileOutputStream = openFileOutput(file_name, MODE_APPEND);
             myWorkoutNamesList.remove(pos);
 
@@ -237,6 +255,7 @@ public class MyWorkouts extends AppCompatActivity {
                 s += "\n";
                 fileOutputStream.write(s.getBytes());
             }
+
 
             fileOutputStream.close();
 
