@@ -9,8 +9,76 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="140dp"
-        tools:layout_editor_absoluteY="89dp">
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <NumberPicker
+            android:id="@+id/minutes_number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="132dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="128dp"
+            android:layout_marginTop="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="128dp" />
+
+        <NumberPicker
+            android:id="@+id/seconds_number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="132dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/minutes_number_picker"
+            android:layout_marginEnd="49dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="49dp" />
+
+        <!--android:np_dividerColor="@color/colorPrimary"-->
+        <!--android:np_formatter="@string/number_picker_formatter"-->
+        <!--android:np_height="180dp"-->
+        <!--android:np_max="59"-->
+        <!--android:np_min="0"-->
+        <!--android:np_selectedTextColor="@color/colorPrimary"-->
+        <!--android:np_selectedTextSize="@dimen/selected_text_size"-->
+        <!--android:np_textColor="@color/colorPrimary"-->
+        <!--android:np_textSize="@dimen/text_size"-->
+        <!--android:np_typeface="@string/roboto_light"-->
+        <!--android:np_value="3"-->
+        <!--android:np_width="64dp"-->
+
+        <TextView
+            android:id="@+id/colon"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="63dp"
+            android:layout_toStartOf="@+id/seconds_number_picker"
+            android:text=":"
+            android:textSize="@dimen/text_size"
+            android:layout_toLeftOf="@+id/seconds_number_picker"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:id="@+id/select_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/colon"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="21dp"
+            android:text="Select Time"
+            android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/text_size"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="21dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="108dp">
 
         <Button
             android:id="@+id/start_voice"
@@ -18,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="54dp"
+            android:layout_marginTop="184dp"
             android:text="@string/start_voice"
             tools:layout_editor_absoluteX="121dp"
             tools:layout_editor_absoluteY="49dp" />
@@ -32,9 +100,9 @@
             android:id="@+id/end_voice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="141dp"
+            android:layout_marginBottom="192dp"
             android:text="@string/end_voice"
             tools:layout_editor_absoluteX="130dp"
             tools:layout_editor_absoluteY="129dp" />

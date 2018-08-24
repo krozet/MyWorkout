@@ -12,9 +12,10 @@ public class TimeInterval implements Parcelable{
     private String backgroundColor;
     private String backgroundText;
     private boolean endingAlert;
-    private double lengthOfTime;
+    private int minutes;
+    private int seconds;
 
-    private String emptyObj = "\"\";\"\";\"\";\"\";\"\";\"\";false;0.0";
+    private String emptyObj = "\"\";\"\";\"\";\"\";\"\";\"\";false;0;0";
 
     public TimeInterval(String obj) {
         parseString(obj);
@@ -32,7 +33,8 @@ public class TimeInterval implements Parcelable{
         backgroundColor = in.readString();
         backgroundText = in.readString();
         endingAlert = in.readByte() != 0;
-        lengthOfTime = in.readDouble();
+        minutes = in.readInt();
+        seconds = in.readInt();
         emptyObj = in.readString();
     }
 
@@ -48,11 +50,11 @@ public class TimeInterval implements Parcelable{
         }
     };
 
-    //name, pathToBeginningAudio, pathToEndingAudio, pathToBackgroundImage, backgroundColor, backgroundText, endingAlert, lengthOfTime
+    //name, pathToBeginningAudio, pathToEndingAudio, pathToBackgroundImage, backgroundColor, backgroundText, endingAlert, minutes, seconds
     private void parseString(String obj) {
         String[] tokens = obj.split(";");
 
-        if(tokens.length == 8) {
+        if(tokens.length == 9) {
             name = tokens[0];
             pathToBeginningAudio = tokens[1];
             pathToEndingAudio = tokens[2];
@@ -60,7 +62,8 @@ public class TimeInterval implements Parcelable{
             backgroundColor = tokens[4];
             backgroundText = tokens[5];
             endingAlert = Boolean.parseBoolean(tokens[6]);
-            lengthOfTime = Double.parseDouble(tokens[7]);
+            minutes = Integer.parseInt(tokens[7]);
+            seconds = Integer.parseInt(tokens[8]);
         } else {
             Log.i("TimeInterval", "Not correct amount of arguments");
         }
@@ -98,8 +101,12 @@ public class TimeInterval implements Parcelable{
         return endingAlert;
     }
 
-    public double getLengthOfTime() {
-        return lengthOfTime;
+    public int getMinutes() {
+        return minutes;
+    }
+
+    public int getSeconds() {
+        return seconds;
     }
 
     public void setName(String name) {
@@ -130,8 +137,12 @@ public class TimeInterval implements Parcelable{
         this.endingAlert = endingAlert;
     }
 
-    public void setLengthOfTime(double lengthOfTime) {
-        this.lengthOfTime = lengthOfTime;
+    public void setMinutes(int minutes) {
+        this.minutes = minutes;
+    }
+
+    public void setSeconds(int seconds) {
+        this.seconds = seconds;
     }
 
     @Override
@@ -148,7 +159,8 @@ public class TimeInterval implements Parcelable{
         dest.writeString(backgroundColor);
         dest.writeString(backgroundText);
         dest.writeByte((byte) (endingAlert ? 1 : 0));
-        dest.writeDouble(lengthOfTime);
+        dest.writeInt(minutes);
+        dest.writeInt(seconds);
         dest.writeString(emptyObj);
     }
 }

@@ -6,7 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+<<<<<<< HEAD
 import android.os.Build;
+=======
+import android.graphics.Typeface;
+>>>>>>> master
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -17,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,11 +42,14 @@ public class MyWorkouts extends AppCompatActivity {
     private List<String> myWorkoutNamesList;
     private ArrayList<Workout> myWorkouts;
 
+<<<<<<< HEAD
     final int CREATE_WORKOUT = 1;
     final int OPEN_WORKOUT = 2;
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
 
+=======
+>>>>>>> master
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
