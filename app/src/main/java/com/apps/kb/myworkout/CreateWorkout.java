@@ -54,14 +54,6 @@ public class CreateWorkout extends AppCompatActivity {
             }
         });
 
-        clearWorkouts = findViewById(R.id.clear_my_workouts);
-        clearWorkouts.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearWorkouts();
-            }
-        });
-
         nameMyWorkout.performClick();
 
         InputMethodManager imm = (InputMethodManager)   getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
@@ -88,21 +80,5 @@ public class CreateWorkout extends AppCompatActivity {
     public void openMyWorkouts() {
         Intent intent = new Intent(this, MyWorkouts.class);
         startActivity(intent);
-    }
-
-    public void clearWorkouts() {
-        String file_name = "my_workouts";
-        String clr = "";
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_PRIVATE);
-            fileOutputStream.write(clr.getBytes());
-            fileOutputStream.close();
-            Toast.makeText(getApplicationContext(), "My workouts cleared", Toast.LENGTH_LONG).show();
-            nameMyWorkout.setText("");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

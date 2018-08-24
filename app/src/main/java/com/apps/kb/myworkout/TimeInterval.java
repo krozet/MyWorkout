@@ -1,8 +1,14 @@
 package com.apps.kb.myworkout;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import android.widget.Toast;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class TimeInterval implements Parcelable{
     private String name;
@@ -18,6 +24,8 @@ public class TimeInterval implements Parcelable{
     private int seconds;
 
     private String emptyObj = "\"\";\"\";\"\";\"\";0;0;0;\"\";false;0;0";
+
+    public final static int NUM_OF_ARGS = 11;
 
     public TimeInterval(String obj) {
         parseString(obj);
@@ -58,7 +66,7 @@ public class TimeInterval implements Parcelable{
     private void parseString(String obj) {
         String[] tokens = obj.split(";");
 
-        if(tokens.length == 11) {
+        if(tokens.length == NUM_OF_ARGS) {
             name = tokens[0];
             pathToBeginningAudio = tokens[1];
             pathToEndingAudio = tokens[2];
@@ -213,10 +221,19 @@ public class TimeInterval implements Parcelable{
                 + this.backgroundText + ";"
                 + this.endingAlert + ";"
                 + this.minutes + ";"
-                + this.seconds;
+                + this.seconds + "\n";
     }
 
-    public void writeToFile() {
-
+    public void writeToFile(Context context) {
+        try {
+            FileOutputStream fileOutputStream = context.openFileOutput(name, context.MODE_APPEND);
+            fileOutputStream.write(toWritableString().getBytes());
+            fileOutputStream.close();
+            Toast.makeText(context, "Time Interval has been created", Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

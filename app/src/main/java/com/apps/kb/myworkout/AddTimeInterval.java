@@ -433,5 +433,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         ti.setMinutes(minutes);
         ti.setSeconds(seconds);
         System.out.println(ti.toString());
+        ti.writeToFile(getApplicationContext());
     }
 }
