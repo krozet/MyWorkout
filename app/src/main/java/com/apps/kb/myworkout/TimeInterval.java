@@ -17,7 +17,7 @@ public class TimeInterval implements Parcelable{
     private int minutes;
     private int seconds;
 
-    private String emptyObj = "\"\";\"\";\"\";\"\";\"\";\"\";false;0;0";
+    private String emptyObj = "\"\";\"\";\"\";\"\";0;0;0;\"\";false;0;0";
 
     public TimeInterval(String obj) {
         parseString(obj);
@@ -66,7 +66,7 @@ public class TimeInterval implements Parcelable{
             primaryBackgroundColor = Integer.parseInt(tokens[4]);
             secondaryBackgroundColor = Integer.parseInt(tokens[5]);
             textColor = Integer.parseInt(tokens[6]);
-            backgroundText = tokens[7];
+            backgroundText = tokens[7]6
             endingAlert = Boolean.parseBoolean(tokens[8]);
             minutes = Integer.parseInt(tokens[9]);
             seconds = Integer.parseInt(tokens[10]);

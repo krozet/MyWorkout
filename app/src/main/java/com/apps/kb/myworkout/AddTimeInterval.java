@@ -105,6 +105,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             @Override
             public void onClick(View v) {
                 writeWorkout(v);
+                createTimeInterval();
                 finish();
             }
         });
@@ -120,8 +121,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         // display message
         displayMessage = findViewById(R.id.display_message);
         displayMessageInput = findViewById(R.id.display_message_input);
-        // save the value of the message
-        //displayMessageInput.getText().toString();
     }
 
     private void setupTextColorPicker() {
@@ -420,6 +419,8 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
 
     public void createTimeInterval() {
         TimeInterval ti = new TimeInterval();
+        backgroundText = displayMessageInput.getText().toString();
+
         ti.setName(name);
         ti.setPathToBeginningAudio(pathToBeginningAudio);
         ti.setPathToEndingAudio(pathToEndingAudio);
@@ -431,6 +432,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         ti.setEndingAlert(endingAlert);
         ti.setMinutes(minutes);
         ti.setSeconds(seconds);
-
+        System.out.println(ti.toString());
     }
 }
