@@ -34,6 +34,9 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import com.google.gson.Gson;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 public class AddTimeInterval extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
@@ -73,6 +76,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         timeInterval = new TimeInterval();
         timeInterval.setName("fuck brad");
 
+        setupName();
         setupSelectTime();
         setupStartVoice();
         setupEndVoice();
@@ -100,6 +104,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                writeWorkout(v);
                 finish();
             }
         });
@@ -393,4 +398,23 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             endingAlert = isChecked;
     }
 
+    public void writeWorkout(View view) {
+        String nameToWrite = name + "\n";
+        String file_name = "my_workouts";
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
+            fileOutputStream.write(nameToWrite.getBytes());
+            fileOutputStream.close();
+            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setupName() {
+        name = getIntent().getStringExtra("name");
+        System.out.println("name: " + name);
+    }
 }

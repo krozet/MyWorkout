@@ -45,7 +45,7 @@ public class CreateWorkout extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                writeWorkout(v);
+//                writeWorkout(v);
                 InputMethodManager imm = (InputMethodManager)getSystemService(
                         getApplicationContext().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(nameMyWorkout.getWindowToken(), 0);
@@ -88,23 +88,6 @@ public class CreateWorkout extends AppCompatActivity {
     public void openMyWorkouts() {
         Intent intent = new Intent(this, MyWorkouts.class);
         startActivity(intent);
-    }
-
-    // move to add time interval
-    public void writeWorkout(View view) {
-        name = nameMyWorkout.getText().toString() + "\n";
-        String file_name = "my_workouts";
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
-            fileOutputStream.write(name.getBytes());
-            fileOutputStream.close();
-            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
-            nameMyWorkout.setText("");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void clearWorkouts() {
