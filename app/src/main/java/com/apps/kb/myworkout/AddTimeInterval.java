@@ -47,11 +47,11 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
 
     // time interval values
     private String name;
-    private String pathToBeginningAudio;
-    private String pathToEndingAudio;
-    private String backgroundText;
-    private int minutes;
-    private int seconds;
+    private String pathToBeginningAudio = "";
+    private String pathToEndingAudio = "";
+    private String backgroundText = "";
+    private int minutes = 0;
+    private int seconds = 30;
     private int primaryBackgroundColor = 0xffffffff;
     private int secondaryBackgroundColor = 0xffffffff;
     private int textColor = 0xffffffff;
@@ -252,14 +252,14 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         minutesNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                timeInterval.setMinutes(newVal);
+                minutes = newVal;
             }
         });
 
         secondsNumberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                timeInterval.setSeconds(newVal);
+                seconds = newVal;
             }
         });
     }
@@ -416,5 +416,21 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     public void setupName() {
         name = getIntent().getStringExtra("name");
         System.out.println("name: " + name);
+    }
+
+    public void createTimeInterval() {
+        TimeInterval ti = new TimeInterval();
+        ti.setName(name);
+        ti.setPathToBeginningAudio(pathToBeginningAudio);
+        ti.setPathToEndingAudio(pathToEndingAudio);
+        ti.setPathToBackgroundImage(pathToBackgroundImage);
+        ti.setPrimaryBackgroundColor(primaryBackgroundColor);
+        ti.setSecondaryBackgroundColor(secondaryBackgroundColor);
+        ti.setTextColor(textColor);
+        ti.setBackgroundText(backgroundText);
+        ti.setEndingAlert(endingAlert);
+        ti.setMinutes(minutes);
+        ti.setSeconds(seconds);
+
     }
 }

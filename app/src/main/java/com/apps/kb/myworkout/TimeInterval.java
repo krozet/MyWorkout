@@ -188,6 +188,20 @@ public class TimeInterval implements Parcelable{
         dest.writeString(emptyObj);
     }
 
+    public String toString() {
+        return "\nName: " + this.name
+                + "\npathToBeginningAudio: " + this.pathToBeginningAudio
+                + "\npathToEndingAudio: " + this.pathToEndingAudio
+                + "\npathToBackgroundImage: " + this.pathToBackgroundImage
+                + "\nprimaryBackgroundColor: " + this.primaryBackgroundColor
+                + "\nsecondaryBackgroundColor: " + this.secondaryBackgroundColor
+                + "\ntextColor: " + this.textColor
+                + "\nbackgroundText: " + this.backgroundText
+                + "\nendingAlert: " + this.endingAlert
+                + "\nminutes: " + this.minutes
+                + "\nseconds: " + this.seconds + "\n";
+    }
+
     public void writeToFile() {
 
     }
