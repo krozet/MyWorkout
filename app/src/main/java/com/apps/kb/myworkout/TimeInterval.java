@@ -66,7 +66,7 @@ public class TimeInterval implements Parcelable{
             primaryBackgroundColor = Integer.parseInt(tokens[4]);
             secondaryBackgroundColor = Integer.parseInt(tokens[5]);
             textColor = Integer.parseInt(tokens[6]);
-            backgroundText = tokens[7]6
+            backgroundText = tokens[7];
             endingAlert = Boolean.parseBoolean(tokens[8]);
             minutes = Integer.parseInt(tokens[9]);
             seconds = Integer.parseInt(tokens[10]);
@@ -200,6 +200,20 @@ public class TimeInterval implements Parcelable{
                 + "\nendingAlert: " + this.endingAlert
                 + "\nminutes: " + this.minutes
                 + "\nseconds: " + this.seconds + "\n";
+    }
+
+    private String toWritableString() {
+        return this.name + ";"
+                + this.pathToBeginningAudio + ";"
+                + this.pathToEndingAudio + ";"
+                + this.pathToBackgroundImage + ";"
+                + this.primaryBackgroundColor + ";"
+                + this.secondaryBackgroundColor + ";"
+                + this.textColor + ";"
+                + this.backgroundText + ";"
+                + this.endingAlert + ";"
+                + this.minutes + ";"
+                + this.seconds;
     }
 
     public void writeToFile() {
