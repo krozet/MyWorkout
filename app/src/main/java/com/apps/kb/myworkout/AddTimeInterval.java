@@ -29,9 +29,12 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
+<<<<<<< HEAD
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
+=======
+>>>>>>> parent of b26ba60... KR added scrolling capability and adjusted the background color selector to change the ScrowView background color instead of the View background color.
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
@@ -71,10 +74,16 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     Button addStartVoiceButton, addEndVoiceButton, addBackgroundImageButton, addBackgroundColorButton, addTextColorButton, saveButton, cancelButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
+<<<<<<< HEAD
     TextView selectTime, colon, displayMessage;
     EditText displayMessageInput;
     Switch fiveSecondAlert;
     ImageView backgroundImageView;
+=======
+    private int currentBackgroundColor = 0xffffffff;
+    private View root;
+
+>>>>>>> parent of b26ba60... KR added scrolling capability and adjusted the background color selector to change the ScrowView background color instead of the View background color.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
