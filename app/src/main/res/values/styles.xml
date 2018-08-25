@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+<<<<<<< HEAD
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -21,4 +22,6 @@
         <item name="android:background">@color/colorPrimaryDark</item>
     </style>
 
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 </resources>

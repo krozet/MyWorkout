@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.widget.Toast;
 =======
 import android.widget.NumberPicker;
@@ -42,6 +43,8 @@ import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 >>>>>>> development
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 
 import com.google.gson.Gson;
 
@@ -294,6 +297,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         Gson gson = new Gson();
         String timeIntervalAsString = gson.toJson(timeInterval);
         intent.putExtra("timeIntervalAsString", timeIntervalAsString);
+<<<<<<< HEAD
         startActivityForResult(intent, RESULT_START_VOICE);
     }
 
@@ -412,6 +416,9 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             endingAlert = isChecked;
+=======
+        startActivity(intent);
+>>>>>>> parent of c92c961... Big Navigation Update
     }
 
     public void writeWorkout(View view) {

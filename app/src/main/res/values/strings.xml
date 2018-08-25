@@ -5,6 +5,7 @@
     <string name="to_create_workout">Create Workout</string>
     <string name="start_voice">Add Start Voice</string>
     <string name="end_voice">Add End Voice</string>
+<<<<<<< HEAD
     <string name="title_activity_workout">WorkoutActivity</string>
 <<<<<<< HEAD
 
@@ -22,5 +23,7 @@
     <string name="cancel">Cancel</string>
 =======
 >>>>>>> parent of a30eca1... Started Adding Music Menu
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 
 </resources>
