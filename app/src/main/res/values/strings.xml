@@ -6,6 +6,7 @@
     <string name="start_voice">Add Start Voice</string>
     <string name="end_voice">Add End Voice</string>
     <string name="title_activity_workout">WorkoutActivity</string>
+<<<<<<< HEAD
 
     <!-- Font -->
     <string name="roboto_regular">sans-serif</string>
@@ -19,5 +20,7 @@
     <string name="background_image">Background Image</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
+=======
+>>>>>>> parent of a30eca1... Started Adding Music Menu
 
 </resources>
