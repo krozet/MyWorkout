@@ -1,6 +1,7 @@
 package com.apps.kb.myworkout;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -8,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -20,15 +20,16 @@ import java.io.IOException;
 public class CreateWorkout extends AppCompatActivity {
     private Button myWorkoutsButton, addWorkout, clearWorkouts, addTimeInterval;
     private EditText nameMyWorkout;
+<<<<<<< HEAD
     private int resultcode;
+    private String name = "";
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_workout);
-        resultcode = RESULT_CANCELED;
-
-        getSupportActionBar().setTitle("Create Workout");
 
         nameMyWorkout = findViewById(R.id.enter_workout_name);
         nameMyWorkout.setOnClickListener(new View.OnClickListener() {
@@ -38,26 +39,30 @@ public class CreateWorkout extends AppCompatActivity {
             }
         });
 
-        //Commenting this out because I don't think we need it
-/*        myWorkoutsButton = findViewById(R.id.to_my_workouts);
+<<<<<<< HEAD
+=======
+        myWorkoutsButton = findViewById(R.id.to_my_workouts);
         myWorkoutsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openMyWorkouts();
             }
-        });*/
+        });
 
+>>>>>>> parent of c92c961... Big Navigation Update
         addWorkout = findViewById(R.id.add_workout);
         addWorkout.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                writeWorkout(v);
+<<<<<<< HEAD
+//                writeWorkout(v);
                 InputMethodManager imm = (InputMethodManager)getSystemService(
                         getApplicationContext().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(nameMyWorkout.getWindowToken(), 0);
                 resultcode = RESULT_OK;
-                onBackPressed();
+=======
+                writeWorkout(v);
             }
         });
 
@@ -65,7 +70,7 @@ public class CreateWorkout extends AppCompatActivity {
         clearWorkouts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clearWorkouts();
+                clearWorkouts(v);
             }
         });
 
@@ -73,26 +78,19 @@ public class CreateWorkout extends AppCompatActivity {
         addTimeInterval.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+>>>>>>> parent of c92c961... Big Navigation Update
                 openAddTimeInterval();
             }
         });
 
-        nameMyWorkout.performClick();
-
-        InputMethodManager imm = (InputMethodManager)   getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        setResult(resultcode);
-        super.onBackPressed();
     }
 
     private void openAddTimeInterval() {
+        name = nameMyWorkout.getText().toString();
         Intent intent = new Intent(this, AddTimeInterval.class);
+        intent.putExtra("name", name);
+        intent.putExtra("creatingWorkout", true);
+        setResult(Activity.RESULT_OK, intent);
         startActivity(intent);
     }
 
@@ -100,6 +98,8 @@ public class CreateWorkout extends AppCompatActivity {
         Intent intent = new Intent(this, MyWorkouts.class);
         startActivity(intent);
     }
+<<<<<<< HEAD
+=======
 
     public void writeWorkout(View view) {
         //Stable
@@ -118,14 +118,14 @@ public class CreateWorkout extends AppCompatActivity {
         }
     }
 
-    public void clearWorkouts() {
+    public void clearWorkouts(View view) {
         String file_name = "my_workouts";
         String clr = "";
         try {
             FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_PRIVATE);
             fileOutputStream.write(clr.getBytes());
             fileOutputStream.close();
-            Toast.makeText(getApplicationContext(), "My workouts cleared", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
             nameMyWorkout.setText("");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -133,4 +133,5 @@ public class CreateWorkout extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+>>>>>>> parent of c92c961... Big Navigation Update
 }

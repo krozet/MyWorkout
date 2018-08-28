@@ -8,7 +8,21 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+<<<<<<< HEAD
+=======
         android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/to_my_workouts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="54dp"
+            android:layout_marginStart="41dp"
+            android:text="My Workouts"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="41dp" />
 
         <Button
             android:id="@+id/clear_my_workouts"
@@ -24,6 +38,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+>>>>>>> parent of c92c961... Big Navigation Update
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="16dp"
         tools:layout_editor_absoluteY="0dp">
@@ -47,18 +62,6 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:text="@string/enter_workout_name" />
-
-        <Button
-            android:id="@+id/add_time_interval"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="138dp"
-            android:layout_marginEnd="15dp"
-            android:text="Add Time Interval"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp" />
     </RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>

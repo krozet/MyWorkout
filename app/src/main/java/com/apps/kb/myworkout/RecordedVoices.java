@@ -1,34 +1,29 @@
 package com.apps.kb.myworkout;
 
+<<<<<<< HEAD
+import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Handler;
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AndroidRuntimeException;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class RecordedVoices extends AppCompatActivity {
-    private static Button clickMe, play, stop, record, confirm;
-    public TimeInterval timeInterval;
-    private MediaRecorder myAudioRecorder;
-    private String outputFile;
-    private long startRecord, stopRecord, recordingLength;
-    private boolean confirmPressed;
+    Button clickMe;
+    TimeInterval timeInterval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recorded_voices);
-        confirmPressed = false;
 
         //get time interval object from create workout
         Gson gson = new Gson();
@@ -42,6 +37,7 @@ public class RecordedVoices extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), timeInterval.getName(), Toast.LENGTH_LONG).show();
             }
         });
+<<<<<<< HEAD
 
         play = (Button) findViewById(R.id.play);
         stop = (Button) findViewById(R.id.stop);
@@ -134,7 +130,11 @@ public class RecordedVoices extends AppCompatActivity {
             public void onClick(View v)
             {
                 confirmPressed = true;
-                onBackPressed();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("outputFile", outputFile);
+                System.out.println("outputFile inside RecordedVoices: " + outputFile);
+                setResult(Activity.RESULT_OK, resultIntent);
+                finish();
             }
         }));
 
@@ -162,5 +162,7 @@ public class RecordedVoices extends AppCompatActivity {
             setResult(RESULT_CANCELED);
             super.onBackPressed();
         }
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
     }
 }

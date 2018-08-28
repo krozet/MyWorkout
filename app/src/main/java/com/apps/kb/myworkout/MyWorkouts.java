@@ -1,32 +1,40 @@
 package com.apps.kb.myworkout;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
 import android.os.Build;
+=======
+import android.graphics.Typeface;
+>>>>>>> master
+=======
+import android.graphics.Typeface;
+import android.os.Build;
+>>>>>>> development
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.NumberPicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -37,19 +45,29 @@ public class MyWorkouts extends AppCompatActivity {
     private List<String> myWorkoutNamesList;
     private ArrayList<Workout> myWorkouts;
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> development
     final int CREATE_WORKOUT = 1;
     final int OPEN_WORKOUT = 2;
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
+=======
+>>>>>>> parent of c92c961... Big Navigation Update
 
+<<<<<<< HEAD
+=======
+>>>>>>> master
+=======
+>>>>>>> development
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_workouts);
         myWorkouts = new ArrayList<>();
         myWorkoutNamesList = new ArrayList<>();
-
-        System.out.println("START");
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECORD_AUDIO)
@@ -67,6 +85,9 @@ public class MyWorkouts extends AppCompatActivity {
         displayMyWorkouts = findViewById(R.id.display_my_workouts);
         displayMyWorkouts.setVisibility(View.GONE);
         createWorkoutButton = findViewById(R.id.to_create_workout);
+        readMyWorkouts();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myWorkoutNamesList);
+        displayMyWorkouts.setAdapter(adapter);
         createWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,60 +95,8 @@ public class MyWorkouts extends AppCompatActivity {
                 openCreateWorkout();
             }
         });
-    }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        readMyWorkouts();
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        System.out.println("REQUEST CODE: " + requestCode + " RESULT CODE: " + resultCode);
-        readMyWorkouts();
-        if(requestCode == CREATE_WORKOUT)
-        {
-            if(resultCode == RESULT_OK)
-            {
-                openNewestWorkout();
-            }
-        }
-    }
-
-    private void openNewestWorkout()
-    {
-        int newestWorkout = displayMyWorkouts.getAdapter().getCount() - 1;
-        displayMyWorkouts.performItemClick(displayMyWorkouts, newestWorkout,
-                displayMyWorkouts.getItemIdAtPosition(newestWorkout));
-    }
-
-    private void printBackStack()
-    {
-        boolean printing = true;
-
-        int i = 0;
-
-        System.out.println("PRINTING BACKSTACK: ");
-
-        while (printing && i < 100)
-        {
-            try
-            {
-                System.out.println("ENTRY: " + fragmentManager.getBackStackEntryAt(i));
-                i++;
-            }
-
-            catch(Exception e)
-            {
-                e.printStackTrace();
-
-                System.out.println("DONE");
-                printing = false;
-            }
-        }
     }
 
     private String[] arrayOf(String str)
@@ -141,6 +110,7 @@ public class MyWorkouts extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList("myWorkouts", myWorkouts);
         intent.putExtras(bundle);
+<<<<<<< HEAD
         startActivityForResult(intent, CREATE_WORKOUT);
     }
 
@@ -228,6 +198,11 @@ public class MyWorkouts extends AppCompatActivity {
             fileOutputStream.write(clr.getBytes());
             fileOutputStream.close();
 
+            // delete Time Intervals as well by deleting the myWorkoutNamesList.get(pos) file
+            if(new File(System.getProperty("user.dir"), myWorkoutNamesList.get(pos)).exists())
+                if(!getApplicationContext().deleteFile( myWorkoutNamesList.get(pos)))
+                    throw new IOException("Unable to delete file: " + myWorkoutNamesList.get(pos));
+
             fileOutputStream = openFileOutput(file_name, MODE_APPEND);
             myWorkoutNamesList.remove(pos);
 
@@ -236,6 +211,7 @@ public class MyWorkouts extends AppCompatActivity {
                 s += "\n";
                 fileOutputStream.write(s.getBytes());
             }
+
 
             fileOutputStream.close();
 
@@ -246,6 +222,9 @@ public class MyWorkouts extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+=======
+        startActivity(intent);
+>>>>>>> parent of c92c961... Big Navigation Update
     }
 
     public void readMyWorkouts() {
@@ -256,8 +235,6 @@ public class MyWorkouts extends AppCompatActivity {
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line;
             String[] tokens;
-
-            myWorkoutNamesList.clear();
 
             while ((line = bufferedReader.readLine()) != null) {
                 tokens = line.split(";");
@@ -270,27 +247,6 @@ public class MyWorkouts extends AppCompatActivity {
             }
 
             displayMyWorkouts.setVisibility(View.VISIBLE);
-
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myWorkoutNamesList);
-            displayMyWorkouts.setAdapter(adapter);
-            displayMyWorkouts.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
-                    openWorkout(position);
-                }
-            });
-            displayMyWorkouts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-                {
-                    String object = adapter.getItem(position);
-                    createDeleteAlert(position);
-                    return true;
-                }
-            });
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
