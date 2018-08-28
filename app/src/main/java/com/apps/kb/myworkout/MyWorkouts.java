@@ -40,6 +40,7 @@ public class MyWorkouts extends AppCompatActivity {
     private ListView displayMyWorkouts;
     private List<String> myWorkoutNamesList;
     private ArrayList<Workout> myWorkouts;
+    private String navigationOrigin = "USER";
 
     final int CREATE_WORKOUT = 1;
     final int OPEN_WORKOUT = 2;
@@ -96,6 +97,7 @@ public class MyWorkouts extends AppCompatActivity {
         {
             if(resultCode == RESULT_OK)
             {
+                navigationOrigin = "CREATE_WORKOUT";
                 openNewestWorkout();
             }
         }
@@ -108,6 +110,7 @@ public class MyWorkouts extends AppCompatActivity {
                 displayMyWorkouts.getItemIdAtPosition(newestWorkout));
     }
 
+    //Doesn't work
     private void printBackStack()
     {
         boolean printing = true;
@@ -155,6 +158,8 @@ public class MyWorkouts extends AppCompatActivity {
         intent.putExtras(bundle);
         String workoutName = displayMyWorkouts.getAdapter().getItem(position).toString();
         intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
+        navigationOrigin = "USER";
         startActivityForResult(intent, OPEN_WORKOUT);
     }
 

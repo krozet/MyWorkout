@@ -74,7 +74,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_add_time_interval);
         root = findViewById(R.id.color_screen);
         timeInterval = new TimeInterval();
-        timeInterval.setName("fuck brad");
+        timeInterval.setName("fuck keawa");
 
         setupName();
         setupSelectTime();
@@ -106,6 +106,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             public void onClick(View v) {
                 writeWorkout(v);
                 createTimeInterval();
+                setResult(RESULT_OK);
                 finish();
             }
         });

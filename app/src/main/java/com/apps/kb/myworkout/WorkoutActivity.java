@@ -13,6 +13,9 @@ public class WorkoutActivity extends AppCompatActivity
 {
     private Button editWorkout, startWorkout, selectMusic;
     private String workoutName;
+    private String navigationOrigin = "USER";
+
+    final int PROGRAMMATIC_REQUEST = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,13 +57,45 @@ public class WorkoutActivity extends AppCompatActivity
 
             }
         });
+
+        if ((getIntent().getStringExtra("NAVIGATION_ORIGIN_ID")).equals("CREATE_WORKOUT"))
+        {
+            Toast.makeText(getApplicationContext(),
+                    "Got here automatically from create workout", Toast.LENGTH_LONG).show();
+            navigationOrigin = "CREATE_WORKOUT";
+            openEditWorkoutProgrammatically();
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        System.out.println("REQUEST CODE: " + requestCode + " RESULT CODE: " + resultCode);
+        if(requestCode == PROGRAMMATIC_REQUEST)
+        {
+            if(resultCode == RESULT_CANCELED)
+            {
+                onBackPressed();
+            }
+        }
     }
 
     private void openEditWorkout()
     {
         Intent intent = new Intent(this, EditWorkoutActivity.class);
         intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
+        navigationOrigin = "USER";
         startActivity(intent);
+    }
+
+    private void openEditWorkoutProgrammatically()
+    {
+        Intent intent = new Intent(this, EditWorkoutActivity.class);
+        intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
+        navigationOrigin = "USER";
+        startActivityForResult(intent, PROGRAMMATIC_REQUEST);
     }
 
 }
