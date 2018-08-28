@@ -60,8 +60,6 @@ public class WorkoutActivity extends AppCompatActivity
 
         if ((getIntent().getStringExtra("NAVIGATION_ORIGIN_ID")).equals("CREATE_WORKOUT"))
         {
-            Toast.makeText(getApplicationContext(),
-                    "Got here automatically from create workout", Toast.LENGTH_LONG).show();
             navigationOrigin = "CREATE_WORKOUT";
             openEditWorkoutProgrammatically();
         }
