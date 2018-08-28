@@ -102,6 +102,7 @@ public class CreateWorkout extends AppCompatActivity {
     }
 
     public void writeWorkout(View view) {
+        //Stable
         String name = nameMyWorkout.getText().toString() + "\n";
         String file_name = "my_workouts";
         try {
