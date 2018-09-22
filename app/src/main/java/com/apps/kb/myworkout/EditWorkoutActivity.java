@@ -58,7 +58,7 @@ public class EditWorkoutActivity extends AppCompatActivity
         Intent intent = new Intent(this, AddTimeInterval.class);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
         navigationOrigin = "USER";
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     private void openAddTimeIntervalProgrammatically()
