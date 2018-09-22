@@ -105,9 +105,10 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                writeWorkout(v);
-                createTimeInterval();
-                setResult(RESULT_OK);
+              createTimeInterval();
+                Intent intent = new Intent();
+                intent.putExtra("timeInterval", timeInterval);
+                setResult(RESULT_OK, intent);
                 onBackPressed();
             }
         });
