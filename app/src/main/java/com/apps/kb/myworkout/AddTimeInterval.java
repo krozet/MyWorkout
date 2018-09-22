@@ -43,7 +43,8 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
     private static final int RESULT_START_VOICE = 2;
-    private static final int RESULT_END_VOICE = 3;
+    private final int PROGRAMMATIC_REQUEST = 3;
+    private static final int RESULT_END_VOICE = 4;
 
     // time interval values
     private String name;
@@ -104,10 +105,10 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeWorkout(v);
+//                writeWorkout(v);
                 createTimeInterval();
                 setResult(RESULT_OK);
-                finish();
+                onBackPressed();
             }
         });
     }
@@ -320,6 +321,13 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                     pathToEndingAudio = data.getStringExtra("outputFile");
                     System.out.println("outputFile inside AddTimeInterval: " + pathToEndingAudio);
                 }
+            case PROGRAMMATIC_REQUEST:
+                {
+                    if(resultCode == RESULT_CANCELED)
+                    {
+                        onBackPressed();
+                    }
+                }
                 break;
         }
     }
@@ -398,20 +406,21 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             endingAlert = isChecked;
     }
 
-    public void writeWorkout(View view) {
-        String nameToWrite = name + "\n";
-        String file_name = "my_workouts";
-        try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
-            fileOutputStream.write(nameToWrite.getBytes());
-            fileOutputStream.close();
-            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    // Do not use - will attempt to write name of workout twice
+//    public void writeWorkout(View view) {
+//        String nameToWrite = name + "\n";
+//        String file_name = "my_workouts";
+//        try {
+//            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
+//            fileOutputStream.write(nameToWrite.getBytes());
+//            fileOutputStream.close();
+//            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public void setupName() {
         name = getIntent().getStringExtra("name");
@@ -434,6 +443,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         ti.setMinutes(minutes);
         ti.setSeconds(seconds);
         System.out.println(ti.toString());
-        ti.writeToFile(getApplicationContext());
+//        ti.writeToFile(getApplicationContext());
     }
 }
