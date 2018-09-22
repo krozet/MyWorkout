@@ -91,6 +91,7 @@ public class WorkoutActivity extends AppCompatActivity
     private void openEditWorkoutProgrammatically()
     {
         Intent intent = new Intent(this, EditWorkoutActivity.class);
+        intent.putExtra("WORKOUT_NAME_ID", workoutName);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
         navigationOrigin = "USER";
         startActivityForResult(intent, PROGRAMMATIC_REQUEST);

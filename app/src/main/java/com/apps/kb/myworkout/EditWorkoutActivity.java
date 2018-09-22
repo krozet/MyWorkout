@@ -12,6 +12,7 @@ public class EditWorkoutActivity extends AppCompatActivity
 {
     private Button addTimeInterval;
     private String navigationOrigin = "USER";
+    private String workoutName;
 
     final int PROGRAMMATIC_REQUEST = 3;
 
@@ -22,8 +23,8 @@ public class EditWorkoutActivity extends AppCompatActivity
         setContentView(R.layout.activity_edit_workout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Edit " +
-                getIntent().getStringExtra("WORKOUT_NAME_ID"));
+        workoutName = getIntent().getStringExtra("WORKOUT_NAME_ID");
+        getSupportActionBar().setTitle("Edit " + workoutName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addTimeInterval = findViewById(R.id.add_time_interval2);
@@ -31,6 +32,13 @@ public class EditWorkoutActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 openAddTimeInterval();
+            }
+        });
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 
@@ -51,12 +59,18 @@ public class EditWorkoutActivity extends AppCompatActivity
             {
                 onBackPressed();
             }
+
+            if(resultCode == RESULT_OK)
+            {
+                setResult(RESULT_OK);
+            }
         }
     }
 
     private void openAddTimeInterval() {
         Intent intent = new Intent(this, AddTimeInterval.class);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
+        intent.putExtra("WORKOUT_NAME_ID", workoutName);
         navigationOrigin = "USER";
         startActivityForResult(intent, 1);
     }
@@ -65,6 +79,7 @@ public class EditWorkoutActivity extends AppCompatActivity
     {
         Intent intent = new Intent(this, AddTimeInterval.class);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
+        intent.putExtra("WORKOUT_NAME_ID", workoutName);
         navigationOrigin = "USER";
         startActivityForResult(intent, PROGRAMMATIC_REQUEST);
     }
