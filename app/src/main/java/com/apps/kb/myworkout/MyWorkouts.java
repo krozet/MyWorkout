@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -231,9 +232,12 @@ public class MyWorkouts extends AppCompatActivity {
             fileOutputStream.close();
 
             // delete Time Intervals as well by deleting the myWorkoutNamesList.get(pos) file
+            String nameOfWorkout = myWorkoutNamesList.get(pos);
             if(new File(System.getProperty("user.dir"), myWorkoutNamesList.get(pos)).exists())
                 if(!getApplicationContext().deleteFile( myWorkoutNamesList.get(pos)))
                     throw new IOException("Unable to delete file: " + myWorkoutNamesList.get(pos));
+                else
+                    System.out.println("Deleted: " + myWorkoutNamesList.get(pos));
 
             fileOutputStream = openFileOutput(file_name, MODE_APPEND);
             myWorkoutNamesList.remove(pos);
@@ -244,6 +248,9 @@ public class MyWorkouts extends AppCompatActivity {
                 fileOutputStream.write(s.getBytes());
             }
 
+            // deletes file from internal storage
+            deleteFile(nameOfWorkout.replaceAll("[^a-zA-Z0-9\\.\\-]", "_"));
+;
 
             fileOutputStream.close();
 

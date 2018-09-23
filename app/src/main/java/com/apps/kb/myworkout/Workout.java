@@ -2,12 +2,13 @@ package com.apps.kb.myworkout;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Workout implements Parcelable{
     private Queue<TimeInterval> queue;
+    private ArrayList<TimeInterval> timeIntervalList;
     private String name;
     private String fileName;
     private boolean isLoaded;
@@ -17,6 +18,7 @@ public class Workout implements Parcelable{
         this.name = name;
         fileName = name.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
         queue = new LinkedList<>();
+        timeIntervalList = new ArrayList<>();
         isLoaded = false;
     }
 
@@ -24,7 +26,6 @@ public class Workout implements Parcelable{
     public Workout(String name, String fileName) {
         this.name = name;
         this.fileName = fileName;
-        load();
     }
 
     protected Workout(Parcel in) {
@@ -46,7 +47,7 @@ public class Workout implements Parcelable{
     };
 
     public void addTimeInterval(TimeInterval interval) {
-       queue.add(interval);
+        timeIntervalList.add(interval);
     }
 
     public String getName() {
@@ -57,9 +58,18 @@ public class Workout implements Parcelable{
 
     }
 
-    public void load() {
-        isLoaded = true;
+    public TimeInterval getTimeIntervalAt(int position) {
+        if (position <= timeIntervalList.size()-1) {
+            return timeIntervalList.get(position);
+        }
+        return null;
     }
+
+    public void addTimeIntervalFromString(String timeIntervalString) {
+        timeIntervalList.add(new TimeInterval(timeIntervalString));
+    }
+
+    public int getSize() { return timeIntervalList.size(); }
 
     public boolean isLoaded() {
         return isLoaded;
