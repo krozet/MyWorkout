@@ -44,8 +44,7 @@ public class WorkoutActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(getApplicationContext(),
-                        "Lol you thought", Toast.LENGTH_LONG).show();
+                openStartWorkout();
             }
         });
 
@@ -97,4 +96,10 @@ public class WorkoutActivity extends AppCompatActivity
         startActivityForResult(intent, PROGRAMMATIC_REQUEST);
     }
 
+    private void openStartWorkout()
+    {
+        Intent intent = new Intent(this, StartWorkoutActivity.class);
+        navigationOrigin = "USER";
+        startActivity(intent);
+    }
 }
