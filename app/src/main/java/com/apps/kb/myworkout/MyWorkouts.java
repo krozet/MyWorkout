@@ -250,7 +250,6 @@ public class MyWorkouts extends AppCompatActivity {
 
             // deletes file from internal storage
             deleteFile(nameOfWorkout.replaceAll("[^a-zA-Z0-9\\.\\-]", "_"));
-;
 
             fileOutputStream.close();
 

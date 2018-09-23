@@ -95,7 +95,6 @@ public class EditWorkoutActivity extends AppCompatActivity
                         workout.addTimeInterval(timeInterval);
                     }
                 }
-
         }
     }
 
@@ -124,9 +123,9 @@ public class EditWorkoutActivity extends AppCompatActivity
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String timeIntervalString;
 
-//            while ((timeIntervalString = bufferedReader.readLine()) != null) {
-//                workout.addTimeIntervalFromString(timeIntervalString);
-//            }
+            while ((timeIntervalString = bufferedReader.readLine()) != null) {
+                workout.addTimeIntervalFromString(timeIntervalString);
+            }
 
             timeIntervalViewList.clear();
 
