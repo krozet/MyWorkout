@@ -10,10 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class Workout implements Parcelable{
-    private Queue<TimeInterval> queue;
     private ArrayList<TimeInterval> timeIntervalList;
     private String name;
     private String fileName;
@@ -23,7 +21,6 @@ public class Workout implements Parcelable{
     public Workout(String name) {
         this.name = name;
         fileName = name.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-        queue = new LinkedList<>();
         timeIntervalList = new ArrayList<>();
         isLoaded = false;
     }

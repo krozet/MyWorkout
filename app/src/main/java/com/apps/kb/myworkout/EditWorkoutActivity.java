@@ -1,5 +1,6 @@
 package com.apps.kb.myworkout;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,7 @@ import java.util.List;
 public class EditWorkoutActivity extends AppCompatActivity
 {
     private Button addTimeIntervalButton, cancelButton, saveButton;
-    private ListView editTimeIntervalView;
+    private DynamicListView editTimeIntervalView;
     private String navigationOrigin = "USER";
     private String workoutName;
     final int TIME_INTERVAL_REQUEST = 1;
@@ -31,6 +32,7 @@ public class EditWorkoutActivity extends AppCompatActivity
     private TimeInterval timeInterval;
     private Workout workout;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -45,7 +47,7 @@ public class EditWorkoutActivity extends AppCompatActivity
         getSupportActionBar().setTitle("Edit " + workoutName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        editTimeIntervalView = findViewById(R.id.edit_time_intervals);
+        editTimeIntervalView = (DynamicListView) findViewById(R.id.edit_time_intervals);
         editTimeIntervalView.setVisibility(View.GONE);
 
         addTimeIntervalButton = findViewById(R.id.add_time_interval2);
@@ -148,26 +150,29 @@ public class EditWorkoutActivity extends AppCompatActivity
         }
         editTimeIntervalView.setVisibility(View.VISIBLE);
 
-        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
+        final StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.text_view, timeIntervalViewList);
+//        final StableArrayAdapter adapter = new StableArrayAdapter(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
+        editTimeIntervalView.setCheeseList(new ArrayList<>(timeIntervalViewList));
         editTimeIntervalView.setAdapter(adapter);
-        editTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-             {
-//              openWorkout(position);
-            }
-        });
+        editTimeIntervalView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+//        editTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+//             {
+////              openWorkout(position);
+//            }
+//        });
 
-        editTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                String object = (String) adapter.getItem(position);
-//              createDeleteAlert(position);
-                return true;
-            }
-        });
+//        editTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+//            {
+//                String object = (String) adapter.getItem(position);
+////              createDeleteAlert(position);
+//                return true;
+//            }
+//        });
 
     }
 }
