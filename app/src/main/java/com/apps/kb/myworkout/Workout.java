@@ -1,7 +1,13 @@
 package com.apps.kb.myworkout;
 
+import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -54,8 +60,26 @@ public class Workout implements Parcelable{
         return name;
     }
 
-    public void save() {
+    public void save(Context context) {
+        context.deleteFile(fileName);
+        for (int i=0; i < timeIntervalList.size(); i++)
+            timeIntervalList.get(i).writeToFile(context);
+    }
 
+    public void load(Context context){
+        timeIntervalList.clear();
+        try {
+            FileInputStream fileInputStream = context.openFileInput(fileName);
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            String timeIntervalString;
+
+            while ((timeIntervalString = bufferedReader.readLine()) != null) {
+                addTimeIntervalFromString(timeIntervalString);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public TimeInterval getTimeIntervalAt(int position) {

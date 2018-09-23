@@ -1,5 +1,6 @@
 package com.apps.kb.myworkout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class EditWorkoutActivity extends AppCompatActivity
 {
-    private Button addTimeInterval;
+    private Button addTimeIntervalButton, cancelButton, saveButton;
     private ListView editTimeIntervalView;
     private String navigationOrigin = "USER";
     private String workoutName;
@@ -37,6 +38,7 @@ public class EditWorkoutActivity extends AppCompatActivity
         timeIntervalViewList = new ArrayList<>();
         workoutName = getIntent().getStringExtra("WORKOUT_NAME_ID");
         workout  = new Workout(workoutName);
+        workout.load(getApplicationContext());
         setContentView(R.layout.activity_edit_workout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,11 +48,29 @@ public class EditWorkoutActivity extends AppCompatActivity
         editTimeIntervalView = findViewById(R.id.edit_time_intervals);
         editTimeIntervalView.setVisibility(View.GONE);
 
-        addTimeInterval = findViewById(R.id.add_time_interval2);
-        addTimeInterval.setOnClickListener(new View.OnClickListener() {
+        addTimeIntervalButton = findViewById(R.id.add_time_interval2);
+        addTimeIntervalButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openAddTimeInterval();
+            }
+        });
+
+        cancelButton = findViewById(R.id.edit_workout_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
+            }
+        });
+
+        saveButton = findViewById(R.id.edit_workout_save);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveWorkout();
+                onBackPressed();
             }
         });
 
@@ -68,11 +88,16 @@ public class EditWorkoutActivity extends AppCompatActivity
         }
     }
 
+    private void saveWorkout() {
+        workout.save(getApplicationContext());
+    }
+
     @Override
     protected void onResume()
     {
         super.onResume();
         populateView();
+
     }
 
     @Override
@@ -115,49 +140,34 @@ public class EditWorkoutActivity extends AppCompatActivity
         startActivityForResult(intent, PROGRAMMATIC_REQUEST);
     }
 
-    private void populateView() {
+    private void populateView(){
+        timeIntervalViewList.clear();
 
-        try {
-            FileInputStream fileInputStream = openFileInput(workout.getName());
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            String timeIntervalString;
-
-            while ((timeIntervalString = bufferedReader.readLine()) != null) {
-                workout.addTimeIntervalFromString(timeIntervalString);
-            }
-
-            timeIntervalViewList.clear();
-
-            for (int i=0; i < workout.getSize(); i++) {
-                timeIntervalViewList.add(workout.getTimeIntervalAt(i).getViewDetails());
-            }
-            editTimeIntervalView.setVisibility(View.VISIBLE);
-
-            final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
-            editTimeIntervalView.setAdapter(adapter);
-            editTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-                {
-//              openWorkout(position);
-                }
-            });
-
-            editTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-                {
-                    String object = (String) adapter.getItem(position);
-//              createDeleteAlert(position);
-                    return true;
-                }
-            });
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (int i=0; i < workout.getSize(); i++) {
+             timeIntervalViewList.add(workout.getTimeIntervalAt(i).getViewDetails());
         }
+        editTimeIntervalView.setVisibility(View.VISIBLE);
+
+        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
+        editTimeIntervalView.setAdapter(adapter);
+        editTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+             {
+//              openWorkout(position);
+            }
+        });
+
+        editTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                String object = (String) adapter.getItem(position);
+//              createDeleteAlert(position);
+                return true;
+            }
+        });
+
     }
 }
