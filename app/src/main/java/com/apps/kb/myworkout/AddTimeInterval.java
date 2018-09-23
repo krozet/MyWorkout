@@ -106,10 +106,10 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             @Override
             public void onClick(View v) {
               createTimeInterval();
-                Intent intent = new Intent();
-                intent.putExtra("timeInterval", timeInterval);
-                setResult(RESULT_OK, intent);
-                onBackPressed();
+              Intent intent = new Intent();
+              intent.putExtra("timeInterval", timeInterval);
+              setResult(RESULT_OK, intent);
+              onBackPressed();
             }
         });
     }
@@ -424,26 +424,25 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
 //    }
 
     public void setupName() {
-        name = getIntent().getStringExtra("name");
+        name = getIntent().getStringExtra("WORKOUT_NAME_ID");
         System.out.println("name: " + name);
     }
 
     public void createTimeInterval() {
-        TimeInterval ti = new TimeInterval();
         backgroundText = displayMessageInput.getText().toString();
 
-        ti.setName(name);
-        ti.setPathToBeginningAudio(pathToBeginningAudio);
-        ti.setPathToEndingAudio(pathToEndingAudio);
-        ti.setPathToBackgroundImage(pathToBackgroundImage);
-        ti.setPrimaryBackgroundColor(primaryBackgroundColor);
-        ti.setSecondaryBackgroundColor(secondaryBackgroundColor);
-        ti.setTextColor(textColor);
-        ti.setBackgroundText(backgroundText);
-        ti.setEndingAlert(endingAlert);
-        ti.setMinutes(minutes);
-        ti.setSeconds(seconds);
-        System.out.println(ti.toString());
+        timeInterval.setName(name);
+        timeInterval.setPathToBeginningAudio(pathToBeginningAudio);
+        timeInterval.setPathToEndingAudio(pathToEndingAudio);
+        timeInterval.setPathToBackgroundImage(pathToBackgroundImage);
+        timeInterval.setPrimaryBackgroundColor(primaryBackgroundColor);
+        timeInterval.setSecondaryBackgroundColor(secondaryBackgroundColor);
+        timeInterval.setTextColor(textColor);
+        timeInterval.setBackgroundText(backgroundText);
+        timeInterval.setEndingAlert(endingAlert);
+        timeInterval.setMinutes(minutes);
+        timeInterval.setSeconds(seconds);
+//        System.out.println(timeInterval.toString());
 //        ti.writeToFile(getApplicationContext());
     }
 }

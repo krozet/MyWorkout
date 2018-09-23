@@ -131,6 +131,10 @@ public class TimeInterval implements Parcelable{
         return seconds;
     }
 
+    public String getViewDetails() {
+        return minutes + ":" + seconds + "     " + backgroundText + "\n";
+    }
+
     public void setName(String name) {
         this.name = name;
     }
