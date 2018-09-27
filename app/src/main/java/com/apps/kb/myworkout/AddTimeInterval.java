@@ -103,6 +103,8 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             backgroundImageView.setImageBitmap(myBitmap);
+        } else {
+            toast("Unable to retrieve image.");
         }
         changeBackgroundColor(timeInterval.getPrimaryBackgroundColor());
         changeTextColor(timeInterval.getTextColor());
@@ -129,6 +131,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -195,6 +198,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                         .show();
             }
         });
+        changeTextColor(Color.BLACK);
     }
 
     private void setupBackgroundColorPicker() {

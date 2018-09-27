@@ -49,6 +49,7 @@ public class EditWorkoutActivity extends AppCompatActivity
     private List<String> timeIntervalViewList;
     private TimeInterval timeInterval;
     private Workout workout;
+    private int editPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -108,6 +109,7 @@ public class EditWorkoutActivity extends AppCompatActivity
                 new RecyclerItemClickListener(this, editTimeIntervalView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
                         editTimeInterval = "TRUE";
+                        editPosition = position;
                         openAddTimeIntervalToEdit(position);
 //                        Toast.makeText(getApplicationContext(), timeIntervalViewList.get(position), Toast.LENGTH_LONG).show();
                     }
@@ -251,6 +253,15 @@ public class EditWorkoutActivity extends AppCompatActivity
                     timeInterval = data.getParcelableExtra("timeInterval");
                     if (timeInterval != null) {
                         workout.addTimeInterval(timeInterval);
+                    }
+                }
+            case EDIT_TIME_INTERVAL_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    timeInterval = data.getParcelableExtra("timeInterval");
+                    if (timeInterval != null && editPosition != -1) {
+                        workout.set(editPosition, timeInterval);
+                        timeIntervalViewList.set(editPosition, workout.getTimeIntervalAt(editPosition).getViewDetails());
+                        editPosition = -1;
                     }
                 }
         }
