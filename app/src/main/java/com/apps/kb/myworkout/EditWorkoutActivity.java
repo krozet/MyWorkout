@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +24,9 @@ import java.util.List;
 public class EditWorkoutActivity extends AppCompatActivity
 {
     private Button addTimeIntervalButton, cancelButton, saveButton;
-    private ListView editTimeIntervalView;
+    private RecyclerView editTimeIntervalView;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     private String navigationOrigin = "USER";
     private String workoutName;
     final int TIME_INTERVAL_REQUEST = 1;
@@ -148,26 +152,36 @@ public class EditWorkoutActivity extends AppCompatActivity
         }
         editTimeIntervalView.setVisibility(View.VISIBLE);
 
-        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
-        editTimeIntervalView.setAdapter(adapter);
-        editTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-             {
-//              openWorkout(position);
-            }
-        });
+        editTimeIntervalView.setHasFixedSize(true);
 
-        editTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                String object = (String) adapter.getItem(position);
-//              createDeleteAlert(position);
-                return true;
-            }
-        });
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        editTimeIntervalView.setLayoutManager(layoutManager);
+
+        // specify an adapter (see also next example)
+        adapter = new MyAdapter(timeIntervalViewList);
+        editTimeIntervalView.setAdapter(adapter);
+
+//        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
+//        editTimeIntervalView.setAdapter(adapter);
+//        editTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+//        {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+//             {
+////              openWorkout(position);
+//            }
+//        });
+//
+//        editTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id)
+//            {
+//                String object = (String) adapter.getItem(position);
+////              createDeleteAlert(position);
+//                return true;
+//            }
+//        });
 
     }
 }
