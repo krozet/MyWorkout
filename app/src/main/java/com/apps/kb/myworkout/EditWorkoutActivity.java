@@ -50,6 +50,10 @@ public class EditWorkoutActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         editTimeIntervalView = findViewById(R.id.edit_time_intervals);
+        editTimeIntervalView.setHasFixedSize(true);
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        editTimeIntervalView.setLayoutManager(layoutManager);
         editTimeIntervalView.setVisibility(View.GONE);
 
         addTimeIntervalButton = findViewById(R.id.add_time_interval2);
@@ -150,17 +154,12 @@ public class EditWorkoutActivity extends AppCompatActivity
         for (int i=0; i < workout.getSize(); i++) {
              timeIntervalViewList.add(workout.getTimeIntervalAt(i).getViewDetails());
         }
-        editTimeIntervalView.setVisibility(View.VISIBLE);
-
-        editTimeIntervalView.setHasFixedSize(true);
-
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        editTimeIntervalView.setLayoutManager(layoutManager);
 
         // specify an adapter (see also next example)
         adapter = new MyAdapter(timeIntervalViewList);
         editTimeIntervalView.setAdapter(adapter);
+
+        editTimeIntervalView.setVisibility(View.VISIBLE);
 
 //        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
 //        editTimeIntervalView.setAdapter(adapter);
