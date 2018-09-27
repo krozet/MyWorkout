@@ -25,9 +25,11 @@ public class WorkoutThread extends Thread
         System.out.println("STARTED");
         while (running)
         {
-            if (workoutActivity.checkTimer() != null && workoutActivity.checkTimer().equals("00:00"))
+            if (workoutActivity.checkTimer() != null && workoutActivity.checkTimer().equals("00:00")
+                    && !workoutActivity.done)
             {
-                workoutActivity.setTimerText();
+                workoutActivity.timerDone();
+                System.out.println("Finished Timer");
             }
         }
         System.out.println("STOPPED");

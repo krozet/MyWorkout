@@ -2,6 +2,8 @@ package com.apps.kb.myworkout;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,6 +27,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
     private boolean timerRunning;
 
     private long startTime, remainingTime, lastTimePressed;
+    public boolean done;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,6 @@ public class StartWorkoutActivity extends AppCompatActivity {
         });
 
         timer.setCountDown(true);
-        //timer.setBase(SystemClock.elapsedRealtime()+30000);
 
         startstop = findViewById(R.id.startstop);
         startstop.setText("START");
@@ -58,39 +60,64 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
         workoutThread = new WorkoutThread(this);
 
-        remainingTime = 30 * 1000;
-        timer.setBase(SystemClock.elapsedRealtime() + remainingTime);
+        startTime = 5000;
+        remainingTime = startTime;
+        timer.setBase(SystemClock.elapsedRealtime() + startTime);
         timerRunning = false;
         workoutThread.setRunning(true);
         workoutThread.start();
+        done = false;
     }
 
     private void startStopClick()
     {
-        if(!timerRunning)
-        {
+        if (!timerRunning) {
+            if (done) {
+                done = false;
+            }
             timer.setBase(SystemClock.elapsedRealtime() + remainingTime);
             timer.start();
             lastTimePressed = SystemClock.elapsedRealtime();
-            startstop.setText("STOP");
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                public void run() {
+                    startstop.setText("STOP");
+                }
+            });
             timerRunning = true;
-        }
-
-        else
-        {
+        } else {
             timer.stop();
             remainingTime = remainingTime - (SystemClock.elapsedRealtime() - lastTimePressed);
-            System.out.println(remainingTime);
-            startstop.setText("START");
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(new Runnable() {
+                public void run() {
+                    startstop.setText("START");
+                }
+            });
             timerRunning = false;
         }
     }
 
-    public void setTimerText()
+    public void timerDone()
     {
-        timer.setText("DONE!");
-        workoutThread.setRunning(false);
+        done = true;
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            public void run() {
+                timer.setText("DONE!");
+            }
+        });
+
         timer.stop();
+
+        handler.post(new Runnable() {
+            public void run() {
+                startstop.setText("RESTART");
+            }
+        });
+
+        remainingTime = startTime;
+        timerRunning = false;
     }
 
     public String checkTimer()
