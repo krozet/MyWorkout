@@ -119,6 +119,10 @@ public class Workout implements Parcelable{
         }
     }
 
+    public void remove(int position) {
+        timeIntervalList.remove(position);
+    }
+
     public void swap(int dragged, int target) {
         Collections.swap(timeIntervalList, dragged, target);
     }

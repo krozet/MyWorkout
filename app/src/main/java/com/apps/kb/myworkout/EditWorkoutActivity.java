@@ -2,7 +2,15 @@ package com.apps.kb.myworkout;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +68,7 @@ public class EditWorkoutActivity extends AppCompatActivity
         editTimeIntervalView.setAdapter(adapter);
         editTimeIntervalView.setVisibility(View.GONE);
 
-        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int positionDragged = viewHolder.getAdapterPosition();
@@ -75,6 +83,60 @@ public class EditWorkoutActivity extends AppCompatActivity
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                final int position = viewHolder.getAdapterPosition();
+                if (direction == ItemTouchHelper.LEFT) {
+                    removeAt(position);
+                }
+            }
+
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                    View itemView = viewHolder.itemView;
+                    int itemHeight = itemView.getBottom() - itemView.getTop();
+                    boolean isCanceled = dX == 0f && !isCurrentlyActive;
+
+                    if (isCanceled) {
+                        clearCanvas(c, (float) itemView.getRight() + dX, (float) itemView.getTop(), (float) itemView.getRight(), (float) itemView.getBottom());
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                        return;
+                    }
+
+                    // Draw the red delete background
+                    ColorDrawable background = new ColorDrawable();
+                    background.setColor(Color.parseColor("#f44336"));
+                    background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                    background.draw(c);
+
+                    // Calculate position of delete icon
+                    Drawable deleteIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_delete_white_24);
+                    int intrinsicWidth = deleteIcon.getIntrinsicWidth();
+                    int intrinsicHeight = deleteIcon.getIntrinsicHeight();
+                    int deleteIconTop = itemView.getTop() + (itemHeight - intrinsicHeight) / 2;
+                    int deleteIconMargin = (itemHeight - intrinsicHeight) / 2;
+                    int deleteIconLeft = itemView.getRight() - deleteIconMargin - intrinsicWidth;
+                    int deleteIconRight = itemView.getRight() - deleteIconMargin;
+                    int deleteIconBottom = deleteIconTop + intrinsicHeight;
+
+                    // Draw the delete icon
+                    deleteIcon.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom);
+                    deleteIcon.draw(c);
+
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                } else {
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                }
+            }
+
+            private void removeAt(int position) {
+                timeIntervalViewList.remove(position);
+                workout.remove(position);
+                adapter.notifyItemRemoved(position);
+            }
+
+            private void clearCanvas(Canvas c, float left, float top, float right, float bottom) {
+                Paint clearPaint = new Paint();
+                clearPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+                c.drawRect(left, top, right, bottom, clearPaint);
             }
         });
 
