@@ -16,11 +16,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -37,9 +39,11 @@ public class EditWorkoutActivity extends AppCompatActivity
     private RecyclerView editTimeIntervalView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+    private Toolbar toolbar;
     private String navigationOrigin = "USER";
     private String workoutName;
     final int TIME_INTERVAL_REQUEST = 1;
+    final int EDIT_TIME_INTERVAL_REQUEST = 2;
     final int PROGRAMMATIC_REQUEST = 3;
     private List<String> timeIntervalViewList;
     private TimeInterval timeInterval;
@@ -49,25 +53,69 @@ public class EditWorkoutActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        timeIntervalViewList = new ArrayList<>();
-        workoutName = getIntent().getStringExtra("WORKOUT_NAME_ID");
-        workout  = new Workout(workoutName);
-        workout.load(getApplicationContext());
-        setContentView(R.layout.activity_edit_workout);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Edit " + workoutName);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        init();
+        setupToolbar();
+        setupRecyclerview();
+        setupAddTimeIntervalButton();
+        setupCancelButton();
+        setupSaveButton();
+    }
 
+    private void setupSaveButton() {
+        saveButton = findViewById(R.id.edit_workout_save);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveWorkout();
+                onBackPressed();
+            }
+        });
+    }
+
+    private void setupCancelButton() {
+        cancelButton = findViewById(R.id.edit_workout_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
+            }
+        });
+    }
+
+    private void setupAddTimeIntervalButton() {
+        addTimeIntervalButton = findViewById(R.id.add_time_interval2);
+        addTimeIntervalButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openAddTimeInterval();
+            }
+        });
+    }
+
+    private void setupRecyclerview() {
+        // recyclerview
         editTimeIntervalView = findViewById(R.id.edit_time_intervals);
+        editTimeIntervalView.setVisibility(View.GONE);
         editTimeIntervalView.setHasFixedSize(true);
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this);
         editTimeIntervalView.setLayoutManager(layoutManager);
         adapter = new MyAdapter(timeIntervalViewList);
         editTimeIntervalView.setAdapter(adapter);
-        editTimeIntervalView.setVisibility(View.GONE);
+        editTimeIntervalView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, editTimeIntervalView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override public void onItemClick(View view, int position) {
+                        Toast.makeText(getApplicationContext(), timeIntervalViewList.get(position), Toast.LENGTH_LONG).show();
+                    }
 
+                    @Override public void onLongItemClick(View view, int position) {
+                        // do whatever
+                    }
+                })
+        );
+
+        // handles drag and drop, and left swipe to delete
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -139,34 +187,14 @@ public class EditWorkoutActivity extends AppCompatActivity
                 c.drawRect(left, top, right, bottom, clearPaint);
             }
         });
-
         helper.attachToRecyclerView(editTimeIntervalView);
+    }
 
-        addTimeIntervalButton = findViewById(R.id.add_time_interval2);
-        addTimeIntervalButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openAddTimeInterval();
-            }
-        });
-
-        cancelButton = findViewById(R.id.edit_workout_cancel);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onBackPressed();
-            }
-        });
-
-        saveButton = findViewById(R.id.edit_workout_save);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveWorkout();
-                onBackPressed();
-            }
-        });
+    private void setupToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Edit " + workoutName);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +202,14 @@ public class EditWorkoutActivity extends AppCompatActivity
                 onBackPressed();
             }
         });
+    }
+
+    private void init() {
+        timeIntervalViewList = new ArrayList<>();
+        workoutName = getIntent().getStringExtra("WORKOUT_NAME_ID");
+        workout  = new Workout(workoutName);
+        workout.load(getApplicationContext());
+        setContentView(R.layout.activity_edit_workout);
 
         if ((getIntent().getStringExtra("NAVIGATION_ORIGIN_ID")).equals("CREATE_WORKOUT"))
         {
@@ -223,6 +259,14 @@ public class EditWorkoutActivity extends AppCompatActivity
         intent.putExtra("WORKOUT_NAME_ID", workoutName);
         navigationOrigin = "USER";
         startActivityForResult(intent, TIME_INTERVAL_REQUEST);
+    }
+
+    private void openAddTimeIntervalToEdit() {
+        Intent intent = new Intent(this, AddTimeInterval.class);
+        intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
+        intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        navigationOrigin = "USER";
+        startActivityForResult(intent, EDIT_TIME_INTERVAL_REQUEST);
     }
 
     private void openAddTimeIntervalProgrammatically()
