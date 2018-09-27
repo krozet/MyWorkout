@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -34,6 +35,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -93,11 +95,33 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     }
 
     private void handleEditTimeInterval() {
-//        System.out.println(getIntent().getStringExtra("TIME_INTERVAL"));
         timeInterval = new TimeInterval(getIntent().getStringExtra("TIME_INTERVAL"));
+        setValues();
+        setNumberPickers();
+        // load background image
+        File imgFile = new File(timeInterval.getPathToBackgroundImage());
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            backgroundImageView.setImageBitmap(myBitmap);
+        }
+        changeBackgroundColor(timeInterval.getPrimaryBackgroundColor());
+        changeTextColor(timeInterval.getTextColor());
+        displayMessageInput.setText(timeInterval.getBackgroundText());
+        fiveSecondAlert.setChecked(timeInterval.isEndingAlertOn());
+    }
 
-         System.out.println(timeInterval.toString());
-
+    private void setValues() {
+        name = timeInterval.getName();
+        pathToBeginningAudio = timeInterval.getPathToBeginningAudio();
+        pathToEndingAudio = timeInterval.getPathToEndingAudio();
+        pathToBackgroundImage = timeInterval.getPathToBackgroundImage();
+        primaryBackgroundColor = timeInterval.getPrimaryBackgroundColor();
+        secondaryBackgroundColor = timeInterval.getSecondaryBackgroundColor();
+        textColor = timeInterval.getTextColor();
+        backgroundText = timeInterval.getBackgroundText();
+        endingAlert = timeInterval.isEndingAlertOn();
+        minutes = timeInterval.getMinutes();
+        seconds = timeInterval.getSeconds();
     }
 
     private void setupCancel() {
@@ -189,8 +213,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
                             @Override
                             public void onColorSelected(int selectedColor) {
-                                // remove this later
-                                toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                             }
                         })
                         .setPositiveButton("ok", new ColorPickerClickListener() {
@@ -235,7 +257,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         addEndVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openStartRecordedVoice();
+                openEndRecordedVoice();
             }
         });
     }
@@ -246,7 +268,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         addStartVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEndRecordedVoice();
+                openStartRecordedVoice();
             }
         });
     }
@@ -279,10 +301,10 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private void setNumberPickers() {
         minutesNumberPicker.setMaxValue(59);
         minutesNumberPicker.setMinValue(0);
-        minutesNumberPicker.setValue(0);
+        minutesNumberPicker.setValue(minutes);
         secondsNumberPicker.setMaxValue(59);
         secondsNumberPicker.setMinValue(0);
-        secondsNumberPicker.setValue(30);
+        secondsNumberPicker.setValue(seconds);
     }
 
     private void openStartRecordedVoice() {
