@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EditWorkoutActivity extends AppCompatActivity
@@ -54,7 +56,28 @@ public class EditWorkoutActivity extends AppCompatActivity
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this);
         editTimeIntervalView.setLayoutManager(layoutManager);
+        adapter = new MyAdapter(timeIntervalViewList);
+        editTimeIntervalView.setAdapter(adapter);
         editTimeIntervalView.setVisibility(View.GONE);
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                int positionDragged = viewHolder.getAdapterPosition();
+                int positionTarget = target.getAdapterPosition();
+                Collections.swap(timeIntervalViewList, positionDragged, positionTarget);
+
+                adapter.notifyItemMoved(positionDragged, positionTarget);
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        });
+
+        helper.attachToRecyclerView(editTimeIntervalView);
 
         addTimeIntervalButton = findViewById(R.id.add_time_interval2);
         addTimeIntervalButton.setOnClickListener(new View.OnClickListener() {
