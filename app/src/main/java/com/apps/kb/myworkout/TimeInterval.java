@@ -131,6 +131,10 @@ public class TimeInterval implements Parcelable{
         return seconds;
     }
 
+    public String getViewDetails() {
+        return minutes + ":" + seconds + "     " + backgroundText + "\n";
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -208,6 +212,20 @@ public class TimeInterval implements Parcelable{
                 + "\nendingAlert: " + this.endingAlert
                 + "\nminutes: " + this.minutes
                 + "\nseconds: " + this.seconds + "\n";
+    }
+
+    public String toTransportableString() {
+        return this.name + ";"
+                + this.pathToBeginningAudio + ";"
+                + this.pathToEndingAudio + ";"
+                + this.pathToBackgroundImage + ";"
+                + this.primaryBackgroundColor + ";"
+                + this.secondaryBackgroundColor + ";"
+                + this.textColor + ";"
+                + this.backgroundText + ";"
+                + this.endingAlert + ";"
+                + this.minutes + ";"
+                + this.seconds;
     }
 
     private String toWritableString() {

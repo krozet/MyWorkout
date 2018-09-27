@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -34,6 +35,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 
 import com.google.gson.Gson;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -75,7 +77,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_add_time_interval);
         root = findViewById(R.id.color_screen);
         timeInterval = new TimeInterval();
-        timeInterval.setName("fuck keawa");
 
         setupName();
         setupSelectTime();
@@ -88,6 +89,41 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setupFiveSecondAlert();
         setupSave();
         setupCancel();
+
+        if ((getIntent().getStringExtra("EDIT_TIME_INTERVAL")).equals("TRUE"))
+            handleEditTimeInterval();
+    }
+
+    private void handleEditTimeInterval() {
+        timeInterval = new TimeInterval(getIntent().getStringExtra("TIME_INTERVAL"));
+        setValues();
+        setNumberPickers();
+        // load background image
+        File imgFile = new File(timeInterval.getPathToBackgroundImage());
+        if (imgFile.exists()) {
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            backgroundImageView.setImageBitmap(myBitmap);
+        } else {
+            toast("Unable to retrieve image.");
+        }
+        changeBackgroundColor(timeInterval.getPrimaryBackgroundColor());
+        changeTextColor(timeInterval.getTextColor());
+        displayMessageInput.setText(timeInterval.getBackgroundText());
+        fiveSecondAlert.setChecked(timeInterval.isEndingAlertOn());
+    }
+
+    private void setValues() {
+        name = timeInterval.getName();
+        pathToBeginningAudio = timeInterval.getPathToBeginningAudio();
+        pathToEndingAudio = timeInterval.getPathToEndingAudio();
+        pathToBackgroundImage = timeInterval.getPathToBackgroundImage();
+        primaryBackgroundColor = timeInterval.getPrimaryBackgroundColor();
+        secondaryBackgroundColor = timeInterval.getSecondaryBackgroundColor();
+        textColor = timeInterval.getTextColor();
+        backgroundText = timeInterval.getBackgroundText();
+        endingAlert = timeInterval.isEndingAlertOn();
+        minutes = timeInterval.getMinutes();
+        seconds = timeInterval.getSeconds();
     }
 
     private void setupCancel() {
@@ -95,6 +131,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(RESULT_CANCELED);
                 finish();
             }
         });
@@ -105,10 +142,11 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                writeWorkout(v);
-                createTimeInterval();
-                setResult(RESULT_OK);
-                onBackPressed();
+              createTimeInterval();
+              Intent intent = new Intent();
+              intent.putExtra("timeInterval", timeInterval);
+              setResult(RESULT_OK, intent);
+              onBackPressed();
             }
         });
     }
@@ -160,6 +198,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                         .show();
             }
         });
+        changeTextColor(Color.BLACK);
     }
 
     private void setupBackgroundColorPicker() {
@@ -178,8 +217,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
                         .setOnColorSelectedListener(new OnColorSelectedListener() {
                             @Override
                             public void onColorSelected(int selectedColor) {
-                                // remove this later
-                                toast("onColorSelected: 0x" + Integer.toHexString(selectedColor));
                             }
                         })
                         .setPositiveButton("ok", new ColorPickerClickListener() {
@@ -224,7 +261,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         addEndVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openStartRecordedVoice();
+                openEndRecordedVoice();
             }
         });
     }
@@ -235,7 +272,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         addStartVoiceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openEndRecordedVoice();
+                openStartRecordedVoice();
             }
         });
     }
@@ -268,10 +305,10 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private void setNumberPickers() {
         minutesNumberPicker.setMaxValue(59);
         minutesNumberPicker.setMinValue(0);
-        minutesNumberPicker.setValue(0);
+        minutesNumberPicker.setValue(minutes);
         secondsNumberPicker.setMaxValue(59);
         secondsNumberPicker.setMinValue(0);
-        secondsNumberPicker.setValue(30);
+        secondsNumberPicker.setValue(seconds);
     }
 
     private void openStartRecordedVoice() {
@@ -406,43 +443,25 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             endingAlert = isChecked;
     }
 
-    // Do not use - will attempt to write name of workout twice
-//    public void writeWorkout(View view) {
-//        String nameToWrite = name + "\n";
-//        String file_name = "my_workouts";
-//        try {
-//            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
-//            fileOutputStream.write(nameToWrite.getBytes());
-//            fileOutputStream.close();
-//            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void setupName() {
-        name = getIntent().getStringExtra("name");
-        System.out.println("name: " + name);
+        name = getIntent().getStringExtra("WORKOUT_NAME_ID");
     }
 
     public void createTimeInterval() {
-        TimeInterval ti = new TimeInterval();
         backgroundText = displayMessageInput.getText().toString();
 
-        ti.setName(name);
-        ti.setPathToBeginningAudio(pathToBeginningAudio);
-        ti.setPathToEndingAudio(pathToEndingAudio);
-        ti.setPathToBackgroundImage(pathToBackgroundImage);
-        ti.setPrimaryBackgroundColor(primaryBackgroundColor);
-        ti.setSecondaryBackgroundColor(secondaryBackgroundColor);
-        ti.setTextColor(textColor);
-        ti.setBackgroundText(backgroundText);
-        ti.setEndingAlert(endingAlert);
-        ti.setMinutes(minutes);
-        ti.setSeconds(seconds);
-        System.out.println(ti.toString());
+        timeInterval.setName(name);
+        timeInterval.setPathToBeginningAudio(pathToBeginningAudio);
+        timeInterval.setPathToEndingAudio(pathToEndingAudio);
+        timeInterval.setPathToBackgroundImage(pathToBackgroundImage);
+        timeInterval.setPrimaryBackgroundColor(primaryBackgroundColor);
+        timeInterval.setSecondaryBackgroundColor(secondaryBackgroundColor);
+        timeInterval.setTextColor(textColor);
+        timeInterval.setBackgroundText(backgroundText);
+        timeInterval.setEndingAlert(endingAlert);
+        timeInterval.setMinutes(minutes);
+        timeInterval.setSeconds(seconds);
+//        System.out.println(timeInterval.toString());
 //        ti.writeToFile(getApplicationContext());
     }
 }

@@ -66,17 +66,27 @@ public class CreateWorkout extends AppCompatActivity {
     {
         setResult(resultcode);
         super.onBackPressed();
-    }
+}
 
     public void writeWorkout(View view) {
-        String name = nameMyWorkout.getText().toString() + "\n";
-        String file_name = "my_workouts";
+        String name = nameMyWorkout.getText().toString();
+        String file_name = name.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        String my_workouts_file_name = "my_workouts";
         try {
-            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
-            fileOutputStream.write(name.getBytes());
+            //edit my workouts to include this workout
+            FileOutputStream fileOutputStream = openFileOutput(my_workouts_file_name, MODE_APPEND);
+            fileOutputStream.write((file_name + "\n").getBytes());
             fileOutputStream.close();
-            //Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
+
+            //create file to save time intervals
+            FileOutputStream fileOutputStream2 = openFileOutput(file_name, MODE_APPEND);
+            fileOutputStream2.write(("").getBytes());
+            fileOutputStream2.close();
+
+            System.out.println("Wrote: " + file_name);
             nameMyWorkout.setText("");
+
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
