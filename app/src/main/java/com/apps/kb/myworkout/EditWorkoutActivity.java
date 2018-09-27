@@ -65,15 +65,16 @@ public class EditWorkoutActivity extends AppCompatActivity
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int positionDragged = viewHolder.getAdapterPosition();
                 int positionTarget = target.getAdapterPosition();
-                Collections.swap(timeIntervalViewList, positionDragged, positionTarget);
 
+                // swap positions for workout obj and recyclerview
+                Collections.swap(timeIntervalViewList, positionDragged, positionTarget);
+                workout.swap(positionDragged, positionTarget);
                 adapter.notifyItemMoved(positionDragged, positionTarget);
                 return false;
             }
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
             }
         });
 

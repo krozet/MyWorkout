@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -109,5 +110,16 @@ public class Workout implements Parcelable{
         dest.writeString(name);
         dest.writeString(fileName);
         dest.writeByte((byte) (isLoaded ? 1 : 0));
+    }
+
+    public void printDetails() {
+        System.out.println("Workout time intervals:");
+        for (int i=0; i < timeIntervalList.size(); i++) {
+            System.out.println(timeIntervalList.get(i));
+        }
+    }
+
+    public void swap(int dragged, int target) {
+        Collections.swap(timeIntervalList, dragged, target);
     }
 }
