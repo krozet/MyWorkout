@@ -105,10 +105,11 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                writeWorkout(v);
-                createTimeInterval();
-                setResult(RESULT_OK);
-                onBackPressed();
+              createTimeInterval();
+              Intent intent = new Intent();
+              intent.putExtra("timeInterval", timeInterval);
+              setResult(RESULT_OK, intent);
+              onBackPressed();
             }
         });
     }
@@ -406,43 +407,26 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
             endingAlert = isChecked;
     }
 
-    // Do not use - will attempt to write name of workout twice
-//    public void writeWorkout(View view) {
-//        String nameToWrite = name + "\n";
-//        String file_name = "my_workouts";
-//        try {
-//            FileOutputStream fileOutputStream = openFileOutput(file_name, MODE_APPEND);
-//            fileOutputStream.write(nameToWrite.getBytes());
-//            fileOutputStream.close();
-//            Toast.makeText(getApplicationContext(), "My workout saved", Toast.LENGTH_LONG).show();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
     public void setupName() {
-        name = getIntent().getStringExtra("name");
+        name = getIntent().getStringExtra("WORKOUT_NAME_ID");
         System.out.println("name: " + name);
     }
 
     public void createTimeInterval() {
-        TimeInterval ti = new TimeInterval();
         backgroundText = displayMessageInput.getText().toString();
 
-        ti.setName(name);
-        ti.setPathToBeginningAudio(pathToBeginningAudio);
-        ti.setPathToEndingAudio(pathToEndingAudio);
-        ti.setPathToBackgroundImage(pathToBackgroundImage);
-        ti.setPrimaryBackgroundColor(primaryBackgroundColor);
-        ti.setSecondaryBackgroundColor(secondaryBackgroundColor);
-        ti.setTextColor(textColor);
-        ti.setBackgroundText(backgroundText);
-        ti.setEndingAlert(endingAlert);
-        ti.setMinutes(minutes);
-        ti.setSeconds(seconds);
-        System.out.println(ti.toString());
+        timeInterval.setName(name);
+        timeInterval.setPathToBeginningAudio(pathToBeginningAudio);
+        timeInterval.setPathToEndingAudio(pathToEndingAudio);
+        timeInterval.setPathToBackgroundImage(pathToBackgroundImage);
+        timeInterval.setPrimaryBackgroundColor(primaryBackgroundColor);
+        timeInterval.setSecondaryBackgroundColor(secondaryBackgroundColor);
+        timeInterval.setTextColor(textColor);
+        timeInterval.setBackgroundText(backgroundText);
+        timeInterval.setEndingAlert(endingAlert);
+        timeInterval.setMinutes(minutes);
+        timeInterval.setSeconds(seconds);
+//        System.out.println(timeInterval.toString());
 //        ti.writeToFile(getApplicationContext());
     }
 }
