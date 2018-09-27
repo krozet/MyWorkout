@@ -41,6 +41,7 @@ public class EditWorkoutActivity extends AppCompatActivity
     private RecyclerView.LayoutManager layoutManager;
     private Toolbar toolbar;
     private String navigationOrigin = "USER";
+    private String editTimeInterval = "FALSE";
     private String workoutName;
     final int TIME_INTERVAL_REQUEST = 1;
     final int EDIT_TIME_INTERVAL_REQUEST = 2;
@@ -106,7 +107,9 @@ public class EditWorkoutActivity extends AppCompatActivity
         editTimeIntervalView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this, editTimeIntervalView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override public void onItemClick(View view, int position) {
-                        Toast.makeText(getApplicationContext(), timeIntervalViewList.get(position), Toast.LENGTH_LONG).show();
+                        editTimeInterval = "TRUE";
+                        openAddTimeIntervalToEdit(position);
+//                        Toast.makeText(getApplicationContext(), timeIntervalViewList.get(position), Toast.LENGTH_LONG).show();
                     }
 
                     @Override public void onLongItemClick(View view, int position) {
@@ -257,15 +260,21 @@ public class EditWorkoutActivity extends AppCompatActivity
         Intent intent = new Intent(this, AddTimeInterval.class);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
         intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        intent.putExtra("EDIT_TIME_INTERVAL", editTimeInterval);
         navigationOrigin = "USER";
+        editTimeInterval = "FALSE";
         startActivityForResult(intent, TIME_INTERVAL_REQUEST);
     }
 
-    private void openAddTimeIntervalToEdit() {
+    private void openAddTimeIntervalToEdit(int position) {
         Intent intent = new Intent(this, AddTimeInterval.class);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
         intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        intent.putExtra("EDIT_TIME_INTERVAL", editTimeInterval);
+        intent.putExtra("TIME_INTERVAL", workout.getTimeIntervalAt(position).toTransportableString());
+
         navigationOrigin = "USER";
+        editTimeInterval = "FALSE";
         startActivityForResult(intent, EDIT_TIME_INTERVAL_REQUEST);
     }
 
@@ -274,7 +283,9 @@ public class EditWorkoutActivity extends AppCompatActivity
         Intent intent = new Intent(this, AddTimeInterval.class);
         intent.putExtra("NAVIGATION_ORIGIN_ID", navigationOrigin);
         intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        intent.putExtra("EDIT_TIME_INTERVAL", editTimeInterval);
         navigationOrigin = "USER";
+        editTimeInterval = "FALSE";
         startActivityForResult(intent, PROGRAMMATIC_REQUEST);
     }
 

@@ -214,6 +214,20 @@ public class TimeInterval implements Parcelable{
                 + "\nseconds: " + this.seconds + "\n";
     }
 
+    public String toTransportableString() {
+        return this.name + ";"
+                + this.pathToBeginningAudio + ";"
+                + this.pathToEndingAudio + ";"
+                + this.pathToBackgroundImage + ";"
+                + this.primaryBackgroundColor + ";"
+                + this.secondaryBackgroundColor + ";"
+                + this.textColor + ";"
+                + this.backgroundText + ";"
+                + this.endingAlert + ";"
+                + this.minutes + ";"
+                + this.seconds;
+    }
+
     private String toWritableString() {
         return this.name + ";"
                 + this.pathToBeginningAudio + ";"

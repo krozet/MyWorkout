@@ -75,7 +75,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_add_time_interval);
         root = findViewById(R.id.color_screen);
         timeInterval = new TimeInterval();
-        timeInterval.setName("fuck keawa");
 
         setupName();
         setupSelectTime();
@@ -88,6 +87,17 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setupFiveSecondAlert();
         setupSave();
         setupCancel();
+
+        if ((getIntent().getStringExtra("EDIT_TIME_INTERVAL")).equals("TRUE"))
+            handleEditTimeInterval();
+    }
+
+    private void handleEditTimeInterval() {
+//        System.out.println(getIntent().getStringExtra("TIME_INTERVAL"));
+        timeInterval = new TimeInterval(getIntent().getStringExtra("TIME_INTERVAL"));
+
+         System.out.println(timeInterval.toString());
+
     }
 
     private void setupCancel() {
@@ -409,7 +419,6 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
 
     public void setupName() {
         name = getIntent().getStringExtra("WORKOUT_NAME_ID");
-        System.out.println("name: " + name);
     }
 
     public void createTimeInterval() {
