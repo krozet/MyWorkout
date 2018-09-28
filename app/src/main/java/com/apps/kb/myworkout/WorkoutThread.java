@@ -22,17 +22,14 @@ public class WorkoutThread extends Thread
     @Override
     public void run()
     {
-        System.out.println("STARTED");
         while (running)
         {
             if (workoutActivity.checkTimer() != null && workoutActivity.checkTimer().equals("00:00")
                     && !workoutActivity.done)
             {
                 workoutActivity.timerDone();
-                System.out.println("Finished Timer");
             }
         }
-        System.out.println("STOPPED");
     }
 
     public boolean checkRunning()
