@@ -84,9 +84,9 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         setupEndVoice();
         setupBackgroundImage();
         setupBackgroundColorPicker();
-        setupTextColorPicker();
         setupDisplayMessage();
         setupFiveSecondAlert();
+        setupTextColorPicker();
         setupSave();
         setupCancel();
 
