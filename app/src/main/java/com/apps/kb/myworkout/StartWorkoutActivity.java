@@ -28,11 +28,11 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
     private Button startstop, debugButton;
 
-    private Chronometer timer;
+    private Chronometer totalTimer, intervalTimer;
     private WorkoutThread workoutThread;
     private boolean timerRunning;
     public Workout workout;
-    private long startTime, remainingTime, lastTimePressed;
+    private long startTime, remainingTotalTime, remainingIntervalTime ,lastTimePressed;
     public boolean done;
     private String workoutName;
 
@@ -65,16 +65,25 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
 
 
-        timer = findViewById(R.id.chronotimer);
+        totalTimer = findViewById(R.id.chronotimer);
+        intervalTimer = findViewById(R.id.chronotimer2);
 
-        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+        totalTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometerChanged) {
-                timer = chronometerChanged;
+                totalTimer = chronometerChanged;
             }
         });
 
-        timer.setCountDown(true);
+        intervalTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometerChanged2) {
+                intervalTimer = chronometerChanged2;
+            }
+        });
+
+        totalTimer.setCountDown(true);
+        intervalTimer.setCountDown(true);
 
         startstop = findViewById(R.id.startstop);
         startstop.setText("START");
@@ -100,11 +109,19 @@ public class StartWorkoutActivity extends AppCompatActivity {
         workoutThread = new WorkoutThread(this);
 
         startTime = workout.totalTimeInMs();
-        remainingTime = startTime;
+
+        remainingTotalTime = startTime;
         nextIntervalTime = startTime;
+
+
         setCurrentInterval(0);
         lastIntervalIndex = 0;
-        timer.setBase(SystemClock.elapsedRealtime() + startTime);
+
+        remainingIntervalTime = getCurrentIntervalLength();
+
+        totalTimer.setBase(SystemClock.elapsedRealtime() + startTime);
+        intervalTimer.setBase(SystemClock.elapsedRealtime() + getCurrentIntervalLength());
+
         timerRunning = false;
         workoutThread.setRunning(true);
         workoutThread.start();
@@ -117,8 +134,12 @@ public class StartWorkoutActivity extends AppCompatActivity {
             if (done) {
                 done = false;
             }
-            timer.setBase(SystemClock.elapsedRealtime() + remainingTime);
-            timer.start();
+            totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
+            totalTimer.start();
+
+            intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+            intervalTimer.start();
+
             lastTimePressed = SystemClock.elapsedRealtime();
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
@@ -128,8 +149,14 @@ public class StartWorkoutActivity extends AppCompatActivity {
             });
             timerRunning = true;
         } else {
-            timer.stop();
-            remainingTime = remainingTime - (SystemClock.elapsedRealtime() - lastTimePressed);
+            totalTimer.stop();
+            remainingTotalTime = remainingTotalTime -
+                    (SystemClock.elapsedRealtime() - lastTimePressed);
+
+            intervalTimer.stop();
+            remainingIntervalTime = remainingIntervalTime -
+                    (SystemClock.elapsedRealtime() - lastTimePressed);
+
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
                 public void run() {
@@ -146,11 +173,12 @@ public class StartWorkoutActivity extends AppCompatActivity {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             public void run() {
-                timer.setText("DONE!");
+                totalTimer.setText("DONE!");
             }
         });
 
-        timer.stop();
+        totalTimer.stop();
+        intervalTimer.stop();
 
         handler.post(new Runnable() {
             public void run() {
@@ -158,13 +186,13 @@ public class StartWorkoutActivity extends AppCompatActivity {
             }
         });
 
-        remainingTime = startTime;
+        remainingTotalTime = startTime;
         timerRunning = false;
     }
 
     public String checkTimer()
     {
-        return timer.getText().toString();
+        return totalTimer.getText().toString();
     }
 
     public void incrementTimeInterval()
@@ -175,6 +203,8 @@ public class StartWorkoutActivity extends AppCompatActivity {
         {
             setCurrentInterval(lastIntervalIndex);
         }
+        intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+        intervalTimer.start();
         incrementing = false;
     }
 
@@ -188,6 +218,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
                 currentIntervalText.setText(currentTimeInterval.getBackgroundText());
             }
         });
+        remainingIntervalTime = getCurrentIntervalLength();
     }
 
     private void populateView() {
@@ -219,7 +250,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
     }
 
-    public long getTimeRemaining() {return timer.getBase() - SystemClock.elapsedRealtime();}
+    public long getTimeRemaining() {return totalTimer.getBase() - SystemClock.elapsedRealtime();}
 
     public boolean isTimerRunning() {return timerRunning;}
 
@@ -229,9 +260,11 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
     public boolean isIncrementing() {return incrementing;}
 
+    public long getCurrentIntervalLength() {return currentTimeInterval.getTotalTimeInMS();}
+
     public void setCurrentIntervalText()
     {
-        final long base2 = timer.getBase() - SystemClock.elapsedRealtime();
+        final long base2 = totalTimer.getBase() - SystemClock.elapsedRealtime();
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             public void run() {
