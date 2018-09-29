@@ -131,8 +131,14 @@ public class StartWorkoutActivity extends AppCompatActivity {
     private void startStopClick()
     {
         if (!timerRunning) {
+            Handler handler = new Handler(Looper.getMainLooper());
             if (done) {
                 done = false;
+                handler.post(new Runnable() {
+                    public void run() {
+                        currentIntervalText.setText(currentTimeInterval.getBackgroundText());
+                    }
+                });
             }
             totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
             totalTimer.start();
@@ -141,7 +147,6 @@ public class StartWorkoutActivity extends AppCompatActivity {
             intervalTimer.start();
 
             lastTimePressed = SystemClock.elapsedRealtime();
-            Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
                 public void run() {
                     startstop.setText("STOP");
@@ -188,6 +193,22 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
         remainingTotalTime = startTime;
         timerRunning = false;
+
+        nextIntervalTime = startTime;
+        lastIntervalIndex = 0;
+        setCurrentInterval(0);
+        remainingIntervalTime = getCurrentIntervalLength();
+
+        handler.post(new Runnable() {
+            public void run() {
+                intervalTimer.setText("DONE!");
+            }
+        });
+        handler.post(new Runnable() {
+            public void run() {
+                currentIntervalText.setText("DONE!");
+            }
+        });
     }
 
     public String checkTimer()
