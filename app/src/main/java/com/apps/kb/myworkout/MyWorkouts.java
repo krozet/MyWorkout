@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Environment;
@@ -52,6 +53,7 @@ public class MyWorkouts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_workouts);
+        getWindow().setFormat(PixelFormat.RGBA_8888);
         myWorkouts = new ArrayList<>();
         myWorkoutNamesList = new ArrayList<>();
 
@@ -70,8 +72,7 @@ public class MyWorkouts extends AppCompatActivity {
             //Permission already granted
         }
 
-        displayMyWorkouts = findViewById(R.id.display_my_workouts);
-        displayMyWorkouts.setVisibility(View.GONE);
+        setupDisplayMyWorkoutsListView();
         createWorkoutButton = findViewById(R.id.to_create_workout);
         createWorkoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +81,11 @@ public class MyWorkouts extends AppCompatActivity {
                 openCreateWorkout();
             }
         });
+    }
+
+    private void setupDisplayMyWorkoutsListView() {
+        displayMyWorkouts = findViewById(R.id.display_my_workouts);
+        displayMyWorkouts.setVisibility(View.GONE);
     }
 
     @Override
