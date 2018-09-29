@@ -107,6 +107,8 @@ public class WorkoutActivity extends AppCompatActivity {
 
     private void openStartWorkout() {
         Intent intent = new Intent(this, StartWorkoutActivity.class);
+        intent.putExtra("WORKOUT_NAME_ID", workoutName);
+        intent.putExtra("Workout", workout);
         navigationOrigin = "USER";
         startActivity(intent);
     }

@@ -131,6 +131,8 @@ public class TimeInterval implements Parcelable{
         return seconds;
     }
 
+    public long getTotalTimeInMS() {return (((seconds) + (minutes * 60)) * 1000);}
+
     public String getViewDetails() {
         return minutes + ":" + seconds + "     " + backgroundText + "\n";
     }
