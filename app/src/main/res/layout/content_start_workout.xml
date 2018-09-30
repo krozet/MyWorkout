@@ -10,19 +10,19 @@
 
     <Chronometer
         android:id="@+id/chronotimer2"
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_width="367dp"
+        android:layout_height="45dp"
         android:layout_margin="16dp"
-        android:layout_marginBottom="58dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="26dp"
+        android:layout_marginBottom="34dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="23dp"
         android:background="#006e0f"
         android:fontFamily="@font/press_start_2p"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/black"
-        android:textSize="64sp"
+        android:textSize="36sp"
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/startstop"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,22 +31,23 @@
 
     <Chronometer
         android:id="@+id/chronotimer"
-        android:layout_width="match_parent"
-        android:layout_height="85dp"
+        android:layout_width="367dp"
+        android:layout_height="45dp"
         android:layout_margin="16dp"
-        android:layout_marginBottom="37dp"
-        android:layout_marginTop="108dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="68dp"
         android:background="#006e0f"
         android:fontFamily="@font/press_start_2p"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/black"
-        android:textSize="64sp"
+        android:textSize="36sp"
         android:typeface="normal"
         app:layout_constraintBottom_toTopOf="@+id/chronotimer2"
-        app:layout_constraintHorizontal_bias="0.875"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></Chronometer>
 
     <Button
@@ -60,9 +61,25 @@
         android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.563" />
+        app:layout_constraintVertical_bias="0.276" />
+
+    <ListView
+        android:id="@+id/time_interval_list"
+        android:layout_width="368dp"
+        android:layout_height="216dp"
+        android:layout_marginBottom="9dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/currentInterval"
+        app:layout_constraintVertical_bias="0.275" />
 
     <TextView
         android:id="@+id/currentInterval"
@@ -71,27 +88,15 @@
         android:layout_marginBottom="220dp"
         android:layout_marginEnd="164dp"
         android:layout_marginStart="162dp"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="32sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startstop" />
-
-    <Button
-        android:id="@+id/debugButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="85dp"
-        android:layout_marginEnd="149dp"
-        android:layout_marginStart="147dp"
-        android:layout_marginTop="74dp"
-        android:text="Debug"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentInterval" />
+        app:layout_constraintTop_toBottomOf="@+id/startstop"
+        app:layout_constraintVertical_bias="0.218" />
 
 </android.support.constraint.ConstraintLayout>

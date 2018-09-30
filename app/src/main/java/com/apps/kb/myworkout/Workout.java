@@ -131,6 +131,17 @@ public class Workout implements Parcelable{
         return totalTime;
     }
 
+    public long totalTimeFromIndex(int i)
+    {
+        long totalTime = 0;
+        for(int j = i; j < timeIntervalList.size(); j++)
+        {
+            totalTime += timeIntervalList.get(j).getTotalTimeInMS();
+        }
+
+        return totalTime;
+    }
+
     public void remove(int position) {
         timeIntervalList.remove(position);
     }

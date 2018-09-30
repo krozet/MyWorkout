@@ -29,13 +29,13 @@ public class WorkoutThread extends Thread
                     && !workoutActivity.done && workoutActivity.isTimerRunning())
             {
                 workoutActivity.timerDone();
-                System.out.println("DONE, INCREMENTING");
                 //workoutActivity.incrementTimeInterval();
             }
 
             else if(workoutActivity.checkTimer() != null && workoutActivity.getTimeRemaining() <=
                     workoutActivity.getNextIntervalTime() && !workoutActivity.done
-                    && workoutActivity.isTimerRunning() && !workoutActivity.isIncrementing())
+                    && workoutActivity.isTimerRunning() && !workoutActivity.isIncrementing()
+                    && !workoutActivity.isResetting())
             {
                 workoutActivity.incrementTimeInterval();
             }

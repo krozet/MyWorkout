@@ -32,7 +32,8 @@ public class StartWorkoutActivity extends AppCompatActivity {
     private WorkoutThread workoutThread;
     private boolean timerRunning;
     public Workout workout;
-    private long startTime, remainingTotalTime, remainingIntervalTime ,lastTimePressed;
+    private long startTime, remainingTotalTime, remainingIntervalTime ,
+            lastTimePressed, lastTimePressedOrSwitched;
     public boolean done;
     private String workoutName;
 
@@ -44,7 +45,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
     private List<String> timeIntervalViewList;
     private ListView workoutTimeIntervalView;
 
-    private boolean incrementing;
+    private boolean incrementing, resetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,8 @@ public class StartWorkoutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start_workout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        resetting = false;
 
         incrementing = false;
 
@@ -63,6 +66,10 @@ public class StartWorkoutActivity extends AppCompatActivity {
         workout = new Workout(workoutName);
         workout.load(getApplicationContext());
 
+        workoutTimeIntervalView = findViewById(R.id.time_interval_list);
+        workoutTimeIntervalView.setVisibility(View.GONE);
+
+        populateView();
 
 
         totalTimer = findViewById(R.id.chronotimer);
@@ -93,16 +100,6 @@ public class StartWorkoutActivity extends AppCompatActivity {
             public void onClick(View v)
             {
                 startStopClick();
-            }
-        });
-
-        debugButton = findViewById(R.id.debugButton);
-        debugButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                setCurrentIntervalText();
             }
         });
 
@@ -147,6 +144,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
             intervalTimer.start();
 
             lastTimePressed = SystemClock.elapsedRealtime();
+            lastTimePressedOrSwitched = SystemClock.elapsedRealtime();
             handler.post(new Runnable() {
                 public void run() {
                     startstop.setText("STOP");
@@ -160,7 +158,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
             intervalTimer.stop();
             remainingIntervalTime = remainingIntervalTime -
-                    (SystemClock.elapsedRealtime() - lastTimePressed);
+                    (SystemClock.elapsedRealtime() - lastTimePressedOrSwitched);
 
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
@@ -218,6 +216,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
     public void incrementTimeInterval()
     {
+        lastTimePressedOrSwitched = SystemClock.elapsedRealtime();
         incrementing = true;
         lastIntervalIndex ++;
         if(lastIntervalIndex < workout.getSize())
@@ -231,6 +230,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
     public void setCurrentInterval(final int i)
     {
+        System.out.println("SETTING INTERVAL TO: " + i);
         nextIntervalTime -= workout.getTimeIntervalAt(i).getTotalTimeInMS();
         currentTimeInterval = workout.getTimeIntervalAt(i);
         Handler handler = new Handler(Looper.getMainLooper());
@@ -243,7 +243,6 @@ public class StartWorkoutActivity extends AppCompatActivity {
     }
 
     private void populateView() {
-        workout.load(getApplicationContext());
         timeIntervalViewList.clear();
 
         for (int i = 0; i < workout.getSize(); i++) {
@@ -256,7 +255,7 @@ public class StartWorkoutActivity extends AppCompatActivity {
         workoutTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//              openWorkout(position);
+              listClicked(position);
             }
         });
 
@@ -264,11 +263,42 @@ public class StartWorkoutActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 String object = (String) adapter.getItem(position);
-//              createDeleteAlert(position);
                 return true;
             }
         });
 
+    }
+
+    public void listClicked(int i)
+    {
+        resetting = true;
+
+        remainingTotalTime = workout.totalTimeFromIndex(i);
+        totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
+
+        lastIntervalIndex = i;
+        setCurrentInterval(i);
+
+        nextIntervalTime = startTime - (startTime - workout.totalTimeFromIndex(i+1));
+        remainingIntervalTime = workout.getTimeIntervalAt(i).getTotalTimeInMS();
+        intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+
+        resetting = false;
+
+        if(done)
+        {
+            done = false;
+            Handler handler = new Handler(Looper.getMainLooper());
+            totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
+
+            intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+
+            handler.post(new Runnable() {
+                public void run() {
+                    startstop.setText("START");
+                }
+            });
+        }
     }
 
     public long getTimeRemaining() {return totalTimer.getBase() - SystemClock.elapsedRealtime();}
@@ -282,6 +312,8 @@ public class StartWorkoutActivity extends AppCompatActivity {
     public boolean isIncrementing() {return incrementing;}
 
     public long getCurrentIntervalLength() {return currentTimeInterval.getTotalTimeInMS();}
+
+    public boolean isResetting() {return resetting;}
 
     public void setCurrentIntervalText()
     {
