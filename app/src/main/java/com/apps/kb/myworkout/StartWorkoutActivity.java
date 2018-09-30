@@ -11,23 +11,41 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.Time;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.text.Layout.JUSTIFICATION_MODE_INTER_WORD;
 
 public class StartWorkoutActivity extends AppCompatActivity {
 
-    private Button startstop;
+    private Button startstop, debugButton;
 
-    private Chronometer timer;
+    private Chronometer totalTimer, intervalTimer;
     private WorkoutThread workoutThread;
     private boolean timerRunning;
-
-    private long startTime, remainingTime, lastTimePressed;
+    public Workout workout;
+    private long startTime, remainingTotalTime, remainingIntervalTime ,
+            lastTimePressed, lastTimePressedOrSwitched;
     public boolean done;
+    private String workoutName;
+
+    private TextView currentIntervalText;
+    public TimeInterval currentTimeInterval;
+    public long nextIntervalTime;
+    public int lastIntervalIndex;
+
+    private List<String> timeIntervalViewList;
+    private ListView workoutTimeIntervalView;
+
+    private boolean incrementing, resetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +54,43 @@ public class StartWorkoutActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        timer = findViewById(R.id.chronotimer);
+        resetting = false;
 
-        timer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+        incrementing = false;
+
+        timeIntervalViewList = new ArrayList<>();
+
+        workoutName = getIntent().getStringExtra("WORKOUT_NAME_ID");
+        currentIntervalText = findViewById(R.id.currentInterval);
+
+        workout = new Workout(workoutName);
+        workout.load(getApplicationContext());
+
+        workoutTimeIntervalView = findViewById(R.id.time_interval_list);
+        workoutTimeIntervalView.setVisibility(View.GONE);
+
+        populateView();
+
+
+        totalTimer = findViewById(R.id.chronotimer);
+        intervalTimer = findViewById(R.id.chronotimer2);
+
+        totalTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
             @Override
             public void onChronometerTick(Chronometer chronometerChanged) {
-                timer = chronometerChanged;
+                totalTimer = chronometerChanged;
             }
         });
 
-        timer.setCountDown(true);
+        intervalTimer.setOnChronometerTickListener(new Chronometer.OnChronometerTickListener() {
+            @Override
+            public void onChronometerTick(Chronometer chronometerChanged2) {
+                intervalTimer = chronometerChanged2;
+            }
+        });
+
+        totalTimer.setCountDown(true);
+        intervalTimer.setCountDown(true);
 
         startstop = findViewById(R.id.startstop);
         startstop.setText("START");
@@ -60,9 +105,20 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
         workoutThread = new WorkoutThread(this);
 
-        startTime = 5000;
-        remainingTime = startTime;
-        timer.setBase(SystemClock.elapsedRealtime() + startTime);
+        startTime = workout.totalTimeInMs();
+
+        remainingTotalTime = startTime;
+        nextIntervalTime = startTime;
+
+
+        setCurrentInterval(0);
+        lastIntervalIndex = 0;
+
+        remainingIntervalTime = getCurrentIntervalLength();
+
+        totalTimer.setBase(SystemClock.elapsedRealtime() + startTime);
+        intervalTimer.setBase(SystemClock.elapsedRealtime() + getCurrentIntervalLength());
+
         timerRunning = false;
         workoutThread.setRunning(true);
         workoutThread.start();
@@ -72,13 +128,23 @@ public class StartWorkoutActivity extends AppCompatActivity {
     private void startStopClick()
     {
         if (!timerRunning) {
+            Handler handler = new Handler(Looper.getMainLooper());
             if (done) {
                 done = false;
+                handler.post(new Runnable() {
+                    public void run() {
+                        currentIntervalText.setText(currentTimeInterval.getBackgroundText());
+                    }
+                });
             }
-            timer.setBase(SystemClock.elapsedRealtime() + remainingTime);
-            timer.start();
+            totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
+            totalTimer.start();
+
+            intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+            intervalTimer.start();
+
             lastTimePressed = SystemClock.elapsedRealtime();
-            Handler handler = new Handler(Looper.getMainLooper());
+            lastTimePressedOrSwitched = SystemClock.elapsedRealtime();
             handler.post(new Runnable() {
                 public void run() {
                     startstop.setText("STOP");
@@ -86,8 +152,14 @@ public class StartWorkoutActivity extends AppCompatActivity {
             });
             timerRunning = true;
         } else {
-            timer.stop();
-            remainingTime = remainingTime - (SystemClock.elapsedRealtime() - lastTimePressed);
+            totalTimer.stop();
+            remainingTotalTime = remainingTotalTime -
+                    (SystemClock.elapsedRealtime() - lastTimePressed);
+
+            intervalTimer.stop();
+            remainingIntervalTime = remainingIntervalTime -
+                    (SystemClock.elapsedRealtime() - lastTimePressedOrSwitched);
+
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
                 public void run() {
@@ -104,11 +176,12 @@ public class StartWorkoutActivity extends AppCompatActivity {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
             public void run() {
-                timer.setText("DONE!");
+                totalTimer.setText("DONE!");
             }
         });
 
-        timer.stop();
+        totalTimer.stop();
+        intervalTimer.stop();
 
         handler.post(new Runnable() {
             public void run() {
@@ -116,12 +189,141 @@ public class StartWorkoutActivity extends AppCompatActivity {
             }
         });
 
-        remainingTime = startTime;
+        remainingTotalTime = startTime;
         timerRunning = false;
+
+        nextIntervalTime = startTime;
+        lastIntervalIndex = 0;
+        setCurrentInterval(0);
+        remainingIntervalTime = getCurrentIntervalLength();
+
+        handler.post(new Runnable() {
+            public void run() {
+                intervalTimer.setText("DONE!");
+            }
+        });
+        handler.post(new Runnable() {
+            public void run() {
+                currentIntervalText.setText("DONE!");
+            }
+        });
     }
 
     public String checkTimer()
     {
-        return timer.getText().toString();
+        return totalTimer.getText().toString();
+    }
+
+    public void incrementTimeInterval()
+    {
+        lastTimePressedOrSwitched = SystemClock.elapsedRealtime();
+        incrementing = true;
+        lastIntervalIndex ++;
+        if(lastIntervalIndex < workout.getSize())
+        {
+            setCurrentInterval(lastIntervalIndex);
+        }
+        intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+        intervalTimer.start();
+        incrementing = false;
+    }
+
+    public void setCurrentInterval(final int i)
+    {
+        System.out.println("SETTING INTERVAL TO: " + i);
+        nextIntervalTime -= workout.getTimeIntervalAt(i).getTotalTimeInMS();
+        currentTimeInterval = workout.getTimeIntervalAt(i);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            public void run() {
+                currentIntervalText.setText(currentTimeInterval.getBackgroundText());
+            }
+        });
+        remainingIntervalTime = getCurrentIntervalLength();
+    }
+
+    private void populateView() {
+        timeIntervalViewList.clear();
+
+        for (int i = 0; i < workout.getSize(); i++) {
+            timeIntervalViewList.add(workout.getTimeIntervalAt(i).getViewDetails());
+        }
+        workoutTimeIntervalView.setVisibility(View.VISIBLE);
+
+        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, timeIntervalViewList);
+        workoutTimeIntervalView.setAdapter(adapter);
+        workoutTimeIntervalView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+              listClicked(position);
+            }
+        });
+
+        workoutTimeIntervalView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String object = (String) adapter.getItem(position);
+                return true;
+            }
+        });
+
+    }
+
+    public void listClicked(int i)
+    {
+        resetting = true;
+
+        remainingTotalTime = workout.totalTimeFromIndex(i);
+        totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
+
+        lastIntervalIndex = i;
+        setCurrentInterval(i);
+
+        nextIntervalTime = startTime - (startTime - workout.totalTimeFromIndex(i+1));
+        remainingIntervalTime = workout.getTimeIntervalAt(i).getTotalTimeInMS();
+        intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+
+        resetting = false;
+
+        if(done)
+        {
+            done = false;
+            Handler handler = new Handler(Looper.getMainLooper());
+            totalTimer.setBase(SystemClock.elapsedRealtime() + remainingTotalTime);
+
+            intervalTimer.setBase(SystemClock.elapsedRealtime() + remainingIntervalTime);
+
+            handler.post(new Runnable() {
+                public void run() {
+                    startstop.setText("START");
+                }
+            });
+        }
+    }
+
+    public long getTimeRemaining() {return totalTimer.getBase() - SystemClock.elapsedRealtime();}
+
+    public boolean isTimerRunning() {return timerRunning;}
+
+    public long getNextIntervalTime() {return nextIntervalTime;}
+
+    public void loadWorkout() {workout.load(getApplicationContext());};
+
+    public boolean isIncrementing() {return incrementing;}
+
+    public long getCurrentIntervalLength() {return currentTimeInterval.getTotalTimeInMS();}
+
+    public boolean isResetting() {return resetting;}
+
+    public void setCurrentIntervalText()
+    {
+        final long base2 = totalTimer.getBase() - SystemClock.elapsedRealtime();
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+            public void run() {
+                //currentIntervalText.setText(Long.toString(base2));
+                currentIntervalText.setText(Long.toString(nextIntervalTime));
+            }
+        });
     }
 }

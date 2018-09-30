@@ -50,6 +50,8 @@ public class CreateWorkout extends AppCompatActivity {
                         getApplicationContext().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(nameMyWorkout.getWindowToken(), 0);
                 resultcode = RESULT_OK;
+                Toast.makeText(getApplicationContext(),
+                        "Workout Created", Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
         });

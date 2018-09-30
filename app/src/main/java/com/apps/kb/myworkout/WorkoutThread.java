@@ -16,6 +16,7 @@ public class WorkoutThread extends Thread
     {
         super();
         this.workoutActivity = workoutActivity;
+        //workoutActivity.loadWorkout();
     }
 
 
@@ -24,10 +25,19 @@ public class WorkoutThread extends Thread
     {
         while (running)
         {
-            if (workoutActivity.checkTimer() != null && workoutActivity.checkTimer().equals("00:00")
-                    && !workoutActivity.done)
+            if (workoutActivity.checkTimer() != null && workoutActivity.getTimeRemaining() <= 0
+                    && !workoutActivity.done && workoutActivity.isTimerRunning())
             {
                 workoutActivity.timerDone();
+                //workoutActivity.incrementTimeInterval();
+            }
+
+            else if(workoutActivity.checkTimer() != null && workoutActivity.getTimeRemaining() <=
+                    workoutActivity.getNextIntervalTime() && !workoutActivity.done
+                    && workoutActivity.isTimerRunning() && !workoutActivity.isIncrementing()
+                    && !workoutActivity.isResetting())
+            {
+                workoutActivity.incrementTimeInterval();
             }
         }
     }
