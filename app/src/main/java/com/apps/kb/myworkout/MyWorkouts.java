@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MyWorkouts extends AppCompatActivity {
-    private Button createWorkoutButton;
+    private ImageButton createWorkoutButton;
     private ListView displayMyWorkouts;
     private List<String> myWorkoutNamesList;
     private ArrayList<Workout> myWorkouts;
