@@ -2,14 +2,11 @@ package com.apps.kb.myworkout;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.PixelFormat;
-import android.graphics.Typeface;
 import android.os.Build;
-import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -21,8 +18,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -31,12 +26,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class MyWorkouts extends AppCompatActivity {
     private Button createWorkoutButton;
@@ -299,7 +291,8 @@ public class MyWorkouts extends AppCompatActivity {
 
             displayMyWorkouts.setVisibility(View.VISIBLE);
 
-            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, myWorkoutNamesList);
+//            final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.my_workout_listview_item, R.id.text_view_head , myWorkoutNamesList);
+            final MyListViewAdapter adapter = new MyListViewAdapter(this, myWorkoutNamesList);
             displayMyWorkouts.setAdapter(adapter);
             displayMyWorkouts.setOnItemClickListener(new AdapterView.OnItemClickListener()
             {
@@ -307,6 +300,7 @@ public class MyWorkouts extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
                 {
                     openWorkout(position);
+                    Toast.makeText(getApplicationContext(),"CLICKED",Toast.LENGTH_LONG).show();
                 }
             });
             displayMyWorkouts.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
