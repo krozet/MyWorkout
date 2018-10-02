@@ -230,7 +230,6 @@ public class StartWorkoutActivity extends AppCompatActivity {
 
     public void setCurrentInterval(final int i)
     {
-        System.out.println("SETTING INTERVAL TO: " + i);
         nextIntervalTime -= workout.getTimeIntervalAt(i).getTotalTimeInMS();
         currentTimeInterval = workout.getTimeIntervalAt(i);
         Handler handler = new Handler(Looper.getMainLooper());
