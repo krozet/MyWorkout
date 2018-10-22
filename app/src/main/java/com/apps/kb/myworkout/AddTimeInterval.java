@@ -45,7 +45,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private static final int PERMISSION_REQUEST = 0;
     private static final int RESULT_LOAD_IMAGE = 1;
     private static final int RESULT_START_VOICE = 2;
-    private final int PROGRAMMATIC_REQUEST = 3;
+    private static final int PROGRAMMATIC_REQUEST = 3;
     private static final int RESULT_END_VOICE = 4;
 
     // time interval values
@@ -62,7 +62,7 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
     private boolean endingAlert;
 
     // widgets
-    private ScrollView root;
+    ScrollView root;
     Button addStartVoiceButton, addEndVoiceButton, addBackgroundImageButton, addBackgroundColorButton, addTextColorButton, saveButton, cancelButton;
     TimeInterval timeInterval;
     NumberPicker minutesNumberPicker, secondsNumberPicker;
@@ -461,7 +461,5 @@ public class AddTimeInterval extends AppCompatActivity implements CompoundButton
         timeInterval.setEndingAlert(endingAlert);
         timeInterval.setMinutes(minutes);
         timeInterval.setSeconds(seconds);
-//        System.out.println(timeInterval.toString());
-//        ti.writeToFile(getApplicationContext());
     }
 }

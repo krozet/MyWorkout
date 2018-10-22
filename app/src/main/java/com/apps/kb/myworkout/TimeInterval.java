@@ -1,5 +1,13 @@
 package com.apps.kb.myworkout;
 
+/*
+* A TimeInterval is highly customizable and allows the user to choose the duration of the TimeInterval,
+* add a recorded message at the beginning and/or end of the TimeInterval (for a hands-free workout),
+* add a description, change the background color, and more.
+* It also implements Parcelable to allow passing between Activities,
+* and it contains a method called writeToFile() which is used to save the TimeInterval to our filing system created from scratch.
+*/
+
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;

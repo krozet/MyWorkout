@@ -1,5 +1,11 @@
 package com.apps.kb.myworkout;
 
+/*
+ * A class used to hold all the TimeIntervals for the specific Workout.
+ * Has methods to load all the TimeIntervals from the file system, or save all the TimeIntervals to the file system.
+ * This class also implements Parcelable for passing between Activities.
+ */
+
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -10,11 +16,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
-import java.util.Queue;
 
 public class Workout implements Parcelable{
-    private Queue<TimeInterval> queue;
     private ArrayList<TimeInterval> timeIntervalList;
     private String name;
     private String fileName;
@@ -24,7 +27,6 @@ public class Workout implements Parcelable{
     public Workout(String name) {
         this.name = name;
         fileName = name.replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
-        queue = new LinkedList<>();
         timeIntervalList = new ArrayList<>();
         isLoaded = false;
     }
